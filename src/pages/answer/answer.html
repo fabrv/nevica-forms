@@ -1,0 +1,24 @@
+<ion-header no-border>
+
+  <ion-navbar>
+    <ion-title>{{formId}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-slides pager>
+
+    <ion-slide *ngFor="let item of questions">
+      <h2>{{item.QUESTION}}</h2>
+
+      <ion-list inset id="input-list">
+        <ion-input type="text" value="" placeholder="Respuesta"></ion-input>
+      </ion-list>
+      <button ion-button clear>Anterior</button>
+      <button ion-button>Siguiente</button>
+    </ion-slide>
+
+  </ion-slides>
+</ion-content>
