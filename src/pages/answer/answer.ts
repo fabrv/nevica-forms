@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild} from '@angular/core';
+import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 
 /**
  * Generated class for the AnswerPage page.
@@ -14,6 +14,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'answer.html',
 })
 export class AnswerPage {
+  @ViewChild(Slides) slides: Slides;
   formId: string = "";
   questions: any = [];
   constructor(public navCtrl: NavController, public navParams: NavParams) {
@@ -25,5 +26,14 @@ export class AnswerPage {
         this.questions = forms[x].QUESTIONS;
       }
     }
+
+    console.log(this.questions);
+  }
+
+  nextSlide(){
+    this.slides.slideNext(200);
+  }
+  prevSlide(){
+    this.slides.slidePrev(200);
   }
 }

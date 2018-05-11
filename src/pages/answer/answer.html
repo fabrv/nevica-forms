@@ -12,12 +12,35 @@
 
     <ion-slide *ngFor="let item of questions">
       <h2>{{item.QUESTION}}</h2>
-
       <ion-list inset id="input-list">
-        <ion-input type="text" value="" placeholder="Respuesta"></ion-input>
+        <ion-input *ngIf="item.TYPE == 1 || item.TYPE == 2 || item.TYPE == 3" type="text" value="" placeholder="Respuesta"></ion-input>
+        <ion-input *ngIf="item.TYPE == 7" type="number" value="" placeholder="Respuesta"></ion-input>
+        <ion-input *ngIf="item.TYPE == 9" type="color" value="" placeholder="Respuesta"></ion-input>
       </ion-list>
-      <button ion-button clear>Anterior</button>
-      <button ion-button>Siguiente</button>
+    
+      <ion-list *ngIf="item.TYPE == 5" radio-group>
+        <ion-item>
+          <ion-label>Yes</ion-label>
+          <ion-radio value="yes"></ion-radio>
+        </ion-item>
+      
+        <ion-item>
+          <ion-label>No</ion-label>
+          <ion-radio value="no"></ion-radio>
+        </ion-item>
+      </ion-list>
+
+      <ion-range *ngIf="item.TYPE == 6"></ion-range>
+      
+      <ion-list inset class="datetime" *ngIf="item.TYPE == 8">
+        <ion-item>
+          <ion-label>Seleccionar fecha</ion-label>
+          <ion-datetime displayFormat="MM/DD/YYYY"></ion-datetime>
+        </ion-item>
+      </ion-list>
+
+      <button ion-button (click)="prevSlide()"clear>Anterior</button>
+      <button ion-button (click)="nextSlide()">Siguiente</button>
     </ion-slide>
 
   </ion-slides>
