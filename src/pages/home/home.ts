@@ -24,14 +24,7 @@ export class HomePage {
       //create the item as an empty json stringified ("[]")
       localStorage.availableForms = JSON.stringify(this.availableForms);
     }
-  }
-  
-  //Standard ionic reorder function
-  reorderItems(indexes) {
-    let element = this.availableForms[indexes.from];
-    this.availableForms.splice(indexes.from, 1);
-    this.availableForms.splice(indexes.to, 0, element);
-  }
+  }  
 
   //Remove form from available lists
   removeForm(form){
@@ -93,14 +86,27 @@ export class HomePage {
         if (data.success == true){
           if (data.data.recordset.length > 0){
             let questions: any = [];
-            for (let x = 0; x < data.data.recordset.length; x++){              
-              questions.push(
-                {
-                  "TYPE": data.data.recordset[x].TYPE_ID,
-                  "QUESTION": data.data.recordset[x].QUESTION,
-                  "ANSWER": ""
-                }
-              )
+            let prevQuestion: number = -1;
+            for (let x = 0; x < data.data.recordset.length; x++){
+              if (prevQuestion == data.data.recordset[x].QUESTION_ID) {
+                questions[questions.length - 1].OPTIONS.push ({
+                  "OPTION_CAPTION": data.data.recordset[x].OPTION_CAPTION,
+                  "OPTION_VALUE": data.data.recordset[x].OPTION_VALUE
+                });
+              }else{
+                questions.push(
+                  {
+                    "TYPE": data.data.recordset[x].TYPE_ID,
+                    "QUESTION": data.data.recordset[x].QUESTION,
+                    "OPTIONS": [{
+                      "OPTION_CAPTION": data.data.recordset[x].OPTION_CAPTION,
+                      "OPTION_VALUE": data.data.recordset[x].OPTION_VALUE
+                    }],
+                    "ANSWER": ""             
+                  }
+                )
+              }
+              prevQuestion = data.data.recordset[x].QUESTION_ID
             }
             this.availableForms.push(
               {
@@ -110,13 +116,16 @@ export class HomePage {
                 "QUESTIONS": questions
               }
             );
+            console.log(this.availableForms);
             this.localSave()
             this.showInstructions = false;
           }else{
-            this.showAlert("No existe esa encuesta", "No existe un formulario con el codigo ingresado")
+            this.showAlert("No existe esa encuesta", "No existe un formulario con el codigo ingresado");
+            console.error("No existe un formulario con el codigo ingresado")
           }
-        }else{
-          this.showAlert("¡Algo salió mal!", "Error al  hacer la transacción. " + data.data.originalError.message);
+        }else{          
+          this.showAlert("¡Algo salió mal!", "Error al  hacer la transacción. " + data.data.number + ", " + data.data.originalError.message);
+          console.error(data.data)
         }
         loading.dismiss();
       });

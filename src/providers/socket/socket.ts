@@ -5,7 +5,7 @@ import * as io from "socket.io-client";
 @Injectable()
 export class SocketProvider {
   socket: any;
-  address: string = "10.0.3.159"
+  address: string = "192.168.0.5"
   port: number = 8080;  
   serverAddress: string = "http://" + this.address + ":" + this.port;
 
@@ -41,7 +41,7 @@ export class SocketProvider {
       if (success == false){        
         this.socket.disconnect();
         //If the server timed-out then the transaction was unsuccesful
-        this.events.publish('addForm', {"success":false, "data": {"number": 504, "originalError": {"info": {"message":"Tiempo de espera con el servidor ha terminado"}}}});
+        this.events.publish('addForm', {"success":false, "data": {"number": 504, "originalError": {"message":"Tiempo de espera con el servidor ha terminado"}}});
       }
     },5000)
   }

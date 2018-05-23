@@ -16,24 +16,55 @@ import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 export class AnswerPage {
   @ViewChild(Slides) slides: Slides;
   formId: string = "";
-  questions: any = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    let forms: any = JSON.parse(localStorage.availableForms);
-    this.formId = navParams.get('formId');
+  forms: any = [];
+  form: any = [];
+  constructor(public navCtrl: NavController, public navParams: NavParams) {    
+    this.forms = JSON.parse(localStorage.availableForms);
+    this.formId = navParams.get('formId');    
 
-    for (let x = 0; x < forms.length; x++){
-      if (forms[x].FORM_NAME == this.formId){
-        this.questions = forms[x].QUESTIONS;
+    for (let x = 0; x < this.forms.length; x++){
+      if (this.forms[x].FORM_NAME == this.formId){        
+        this.form = this.forms[x];
       }
     }
+  }
 
-    console.log(this.questions);
+  ngOnInit(){
+    this.slides.lockSwipes(true);
   }
 
   nextSlide(){
+    this.slides.lockSwipes(false);
     this.slides.slideNext(200);
+    this.slides.lockSwipes(true);
+
+    console.log(this.forms);
+    localStorage.availableForms = JSON.stringify(this.forms);
   }
   prevSlide(){
+    this.slides.lockSwipes(false);
     this.slides.slidePrev(200);
+    this.slides.lockSwipes(true);    
+
+    console.log(this.forms);    
+    localStorage.availableForms = JSON.stringify(this.forms);
+  }
+
+  finishForm(){
+    console.log("TEST")
+    if (localStorage.finishedForms) {
+      let finishedForms:any = [];
+      finishedForms = JSON.parse(localStorage.finishedForms);
+      finishedForms.push(this.form);
+
+      let i = this.forms.indexOf(this.form);
+      this.forms.splice(i, 1)
+      localStorage.availableForms = JSON.stringify(this.forms);
+      this.slides.slideTo(1,200)
+
+      localStorage.finishedForms = JSON.stringify(finishedForms);
+    }else{
+      localStorage.finishedForms = JSON.stringify([this.form]);
+    }
   }
 }
