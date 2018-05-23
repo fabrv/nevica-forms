@@ -30,39 +30,44 @@ export class AnswerPage {
   }
 
   ngOnInit(){
+    //This will disable the swiping between the slides (questions)
     this.slides.lockSwipes(true);
   }
 
   nextSlide(){
+    //The sliding must be reenabled to move to the next slide    
     this.slides.lockSwipes(false);
+    //The parameter is the time for the animation in milliseconds
     this.slides.slideNext(200);
+    //After the animation is donde then disable the swiping again
     this.slides.lockSwipes(true);
-
-    console.log(this.forms);
+    
     localStorage.availableForms = JSON.stringify(this.forms);
   }
   prevSlide(){
+    //Same comments as in next slide but for prevslides
     this.slides.lockSwipes(false);
     this.slides.slidePrev(200);
     this.slides.lockSwipes(true);    
-
-    console.log(this.forms);    
+    
     localStorage.availableForms = JSON.stringify(this.forms);
   }
 
-  finishForm(){
-    console.log("TEST")
+  finishForm(){    
     if (localStorage.finishedForms) {
       let finishedForms:any = [];
       finishedForms = JSON.parse(localStorage.finishedForms);
       finishedForms.push(this.form);
 
-      let i = this.forms.indexOf(this.form);
-      this.forms.splice(i, 1)
+      for (let i = 0; i < this.form.QUESTIONS.length; i ++){        
+        this.form.QUESTIONS[i].ANSWER = ""
+      }
       localStorage.availableForms = JSON.stringify(this.forms);
-      this.slides.slideTo(1,200)
 
       localStorage.finishedForms = JSON.stringify(finishedForms);
+      this.slides.lockSwipes(false);
+      this.slides.slideTo(0,200);
+      this.slides.lockSwipes(true);
     }else{
       localStorage.finishedForms = JSON.stringify([this.form]);
     }

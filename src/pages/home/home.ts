@@ -80,20 +80,27 @@ export class HomePage {
     if (!formExists){      
       this.socket.getForm(code);
 
-      //Suscribir al evento 'addForm' creado en SocketProvider
-      this.events.subscribe("addForm", (data) => {
+      //Subscibe to 'addForm' in SocketProvider
+      this.events.subscribe("addForm", (data) => {        
+        //Once the message is receive unsuscribe
         this.events.unsubscribe("addForm");
+        //If the transaction was succesfull then parse the SQL to a usable array.        
         if (data.success == true){
+          //If the server returned at least 1 form.          
           if (data.data.recordset.length > 0){
             let questions: any = [];
             let prevQuestion: number = -1;
+            
             for (let x = 0; x < data.data.recordset.length; x++){
-              if (prevQuestion == data.data.recordset[x].QUESTION_ID) {
+              //If the question id is repeated then it must be because it has more than one option
+              //If it has more than one option it will push the option instead of creating a new question
+              if (prevQuestion == data.data.recordset[x].QUESTION_ID) {                
                 questions[questions.length - 1].OPTIONS.push ({
                   "OPTION_CAPTION": data.data.recordset[x].OPTION_CAPTION,
                   "OPTION_VALUE": data.data.recordset[x].OPTION_VALUE
                 });
               }else{
+                //If it the first option then it will create the question.
                 questions.push(
                   {
                     "TYPE": data.data.recordset[x].TYPE_ID,
@@ -108,6 +115,8 @@ export class HomePage {
               }
               prevQuestion = data.data.recordset[x].QUESTION_ID
             }
+            //The new form is created and the QUESTIONS array, now already properly parsed, 
+            //is added in a property of the form
             this.availableForms.push(
               {
                 "FORM_NAME": data.data.recordset[0].FORM_NAME,
@@ -115,8 +124,7 @@ export class HomePage {
                 "CODE": code,
                 "QUESTIONS": questions
               }
-            );
-            console.log(this.availableForms);
+            );            
             this.localSave()
             this.showInstructions = false;
           }else{
