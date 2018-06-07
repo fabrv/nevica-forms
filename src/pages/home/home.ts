@@ -78,7 +78,7 @@ export class HomePage {
 
     //Call getForm function in SocketProvider if there is no form with code
     if (!formExists){      
-      this.socket.getForm(code);
+      this.socket.transactionEmitter(code, "getForm", "addForm");
 
       //Subscibe to 'addForm' in SocketProvider
       this.events.subscribe("addForm", (data) => {        
@@ -105,6 +105,7 @@ export class HomePage {
                   {
                     "TYPE": data.data.recordset[x].TYPE_ID,
                     "QUESTION": data.data.recordset[x].QUESTION,
+                    "QUESTION_ID": data.data.recordset[x].QUESTION_ID,
                     "OPTIONS": [{
                       "OPTION_CAPTION": data.data.recordset[x].OPTION_CAPTION,
                       "OPTION_VALUE": data.data.recordset[x].OPTION_VALUE
@@ -122,7 +123,8 @@ export class HomePage {
                 "FORM_NAME": data.data.recordset[0].FORM_NAME,
                 "DATE_CREATED": (data.data.recordset[0].DATE_CREATED).slice(0,10),
                 "CODE": code,
-                "QUESTIONS": questions
+                "QUESTIONS": questions,
+                "FINISHED_DATE":""
               }
             );            
             this.localSave()

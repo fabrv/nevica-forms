@@ -40,8 +40,7 @@ export class AnswerPage {
     //The parameter is the time for the animation in milliseconds
     this.slides.slideNext(200);
     //After the animation is donde then disable the swiping again
-    this.slides.lockSwipes(true);
-    
+    this.slides.lockSwipes(true);    
     localStorage.availableForms = JSON.stringify(this.forms);
   }
   prevSlide(){
@@ -53,21 +52,29 @@ export class AnswerPage {
     localStorage.availableForms = JSON.stringify(this.forms);
   }
 
-  finishForm(){    
+  finishForm(){
+    var currentdate = new Date(); 
+    var datetime = currentdate.getFullYear() + "-"
+                    + (currentdate.getMonth()+1)  + "-"
+                    + currentdate.getDate() + " "
+                    + currentdate.getHours() + ":"
+                    + currentdate.getMinutes()
+
+    this.form.FINISHED_DATE = datetime;
     if (localStorage.finishedForms) {
       let finishedForms:any = [];
       finishedForms = JSON.parse(localStorage.finishedForms);
       finishedForms.push(this.form);
 
-      for (let i = 0; i < this.form.QUESTIONS.length; i ++){        
-        this.form.QUESTIONS[i].ANSWER = ""
-      }
-      localStorage.availableForms = JSON.stringify(this.forms);
-
       localStorage.finishedForms = JSON.stringify(finishedForms);
       this.slides.lockSwipes(false);
       this.slides.slideTo(0,200);
       this.slides.lockSwipes(true);
+
+      for (let i = 0; i < this.form.QUESTIONS.length; i ++){        
+        this.form.QUESTIONS[i].ANSWER = ""
+      }
+      localStorage.availableForms = JSON.stringify(this.forms);
     }else{
       localStorage.finishedForms = JSON.stringify([this.form]);
     }

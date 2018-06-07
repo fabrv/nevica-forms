@@ -14,14 +14,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'form.html',
 })
 export class FormPage {
-  formId: string = "";
+  datetime: string = "";
   questions: any = [];
+  formName: string;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    let forms: any = JSON.parse(localStorage.availableForms);
-    this.formId = navParams.get('formId');
+    let forms: any = JSON.parse(localStorage.finishedForms);
+    this.datetime = navParams.get('date');
 
     for (let x = 0; x < forms.length; x++){
-      if (forms[x].FORM_NAME == this.formId){
+      if (forms[x].FINISHED_DATE == this.datetime){
+        this.formName = forms[x].FORM_NAME
         this.questions = forms[x].QUESTIONS;
       }
     }

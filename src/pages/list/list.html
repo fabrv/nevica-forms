@@ -1,16 +1,28 @@
-<ion-header>
+<ion-header no-border>
   <ion-navbar>
     <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
+      <ion-icon name="menu" color="primary"></ion-icon>
     </button>
-    <ion-title>List</ion-title>
+    <ion-title>Historial</ion-title>
+
+    <ion-buttons end>
+      <button ion-button color="primary" (click)="upload(0)">
+        SUBIR
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <ion-list>
-      <ion-item-group>
-        <ion-item *ngFor="let item of items">{{ item }}</ion-item>
-      </ion-item-group>
-    </ion-list>
+  <ion-item-group>
+    <ion-item-divider color="light">POR SUBIR</ion-item-divider>
+    <ion-item no-lines *ngFor="let item of forms" (click)="pushPage(item.FINISHED_DATE)">
+      {{item.FORM_NAME}}
+      <p item-end>{{item.FINISHED_DATE}}</p>
+    </ion-item>
+  </ion-item-group>
+  <ion-item-group>
+      <ion-item-divider color="light">SUBIDOS</ion-item-divider>
+      <ion-item no-lines>Angola</ion-item>
+    </ion-item-group>
 </ion-content>

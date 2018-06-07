@@ -5,7 +5,7 @@ import * as io from "socket.io-client";
 @Injectable()
 export class SocketProvider {
   socket: any;
-  address: string = "192.168.0.5"
+  address: string = "192.168.0.4"
   port: number = 8080;  
   serverAddress: string = "http://" + this.address + ":" + this.port;
 
@@ -14,7 +14,7 @@ export class SocketProvider {
   transactionID: string;
   constructor(public events: Events) {}
 
-  getForm(form: string){
+  transactionEmitter(value: any, transactionName: string, returnName: string){
     let success:boolean = false;
     //Random HEX to new transaction
     //EVERY Transaction MUST have a new random HEX to ID it
@@ -23,14 +23,15 @@ export class SocketProvider {
 
     //Socket connection
     this.socket = io.connect(this.serverAddress, {reconnection: false});
-    this.socket.emit('getForm', form, this.transactionID);
+    this.socket.emit(transactionName, value, this.transactionID);
+    console.log("EMITTED");
         
     this.socket.on(this.transactionID, (data)=> {      
-      //'AddForm' event, with array as response
+      //<<returnName>> event, with array as response
       //If the server answered then the transaction was succesfull
       console.log(data)
 
-      this.events.publish('addForm', {"success":data.success, "data": data.data});      
+      this.events.publish(returnName, {"success":data.success, "data": data.data});      
       this.socket.disconnect();
       success = true;
       return;
@@ -38,10 +39,10 @@ export class SocketProvider {
 
     //5 seconds connection timeout
     setTimeout(()=>{      
-      if (success == false){        
+      if (success == false){
         this.socket.disconnect();
         //If the server timed-out then the transaction was unsuccesful
-        this.events.publish('addForm', {"success":false, "data": {"number": 504, "originalError": {"message":"Tiempo de espera con el servidor ha terminado"}}});
+        this.events.publish(returnName, {"success":false, "data": {"number": 504, "originalError": {"message":"Tiempo de espera con el servidor ha terminado"}}});
       }
     },5000)
   }
