@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, LoadingController, Events } from 'ionic-angular';
+import { NavController, NavParams, LoadingController, Events, ToastController, AlertController } from 'ionic-angular';
 import { FormPage } from '../form/form';
 import { SocketProvider } from '../../providers/socket/socket'
 
@@ -10,9 +10,21 @@ import { SocketProvider } from '../../providers/socket/socket'
 })
 export class ListPage {
   forms:any = [];
+  uploadedForms: any = []
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, private socket: SocketProvider, public events: Events) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public loadingCtrl: LoadingController, private socket: SocketProvider, public events: Events, public toastCtrl: ToastController, public alertCtrl: AlertController) {
+    //Create variables for uploaded forms and finishedforms in localstorage if...
+    //they don't exist
+    //("[]" is of course an empty array)
+    if (!localStorage.finishedForms){
+      localStorage.finishedForms = "[]"
+    }
+    if (!localStorage.uploadedForms){
+      localStorage.uploadedForms = "[]"
+    }
+    //'Parse them bois' in local variables
     this.forms = JSON.parse(localStorage.finishedForms);
+    this.uploadedForms = JSON.parse(localStorage.uploadedForms);
   }
 
   pushPage(datetime){
@@ -23,25 +35,57 @@ export class ListPage {
     });
   }
 
-  upload(index: number){
-    console.log(this.forms.length);
-    console.log(index);
-    
+  upload(){
     //Define loader
     let loading = this.loadingCtrl.create({
-      content: 'Subiendo formulario ' + (index + 1) + "/" + this.forms.length
+      content: 'Subiendo formulario(s)'
     });
-    //Start loader
+    //Present loader
     loading.present();
     
-    console.log(this.forms[index])
-    this.socket.transactionEmitter(this.forms[index],"insertFilledForm","formUploaded")
+    //Start emitter with all the forms to be uploaded
+    //The event to be returned will be 'formsuploaded'
+    this.socket.transactionEmitter(this.forms,"insertFilledForms","formsUploaded")
 
-    //Subscibe to 'formUploaded' in SocketProvider
-    this.events.subscribe("formUploaded", (data) => {        
+
+    //The socket will return with the event 'formsUploaded' so here we subscribe to said event
+    this.events.subscribe("formsUploaded", (data) => {
       //Once the message is receive unsuscribe
       this.events.unsubscribe("formUploaded");
-      console.log(data);
+      if (data.success == true){     
+        //Pass the recently uploaded forms to a antoher variable so it can be displayed in 'Subidos'        
+        localStorage.uploadedforms = this.forms
+        this.uploadedForms = this.forms
+        //Clear the finished forms variables
+        this.forms = [];
+        localStorage.finishedForms = "[]"
+        //Give the user a cue that the forms have been succesfully uploaded
+        //(The cue will be a standard ionic Toast)
+        this.presentToast("Formularios exitosamente subidos")
+      }else{
+        this.showAlert("¡Algo salió mal!", "Error al  hacer la transacción. " + data.data.number + ", " + data.data.originalError.message);
+        console.error(data.data)        
+      }
+      loading.dismiss()
     })
+  }
+
+  //Default ionic toast
+  presentToast(message) {
+    const toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
+  }
+
+  //Default ionic alert prompt
+  showAlert(title:string, subTitle:string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: subTitle,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 }

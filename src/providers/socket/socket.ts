@@ -29,7 +29,6 @@ export class SocketProvider {
     this.socket.on(this.transactionID, (data)=> {      
       //<<returnName>> event, with array as response
       //If the server answered then the transaction was succesfull
-      console.log(data)
 
       this.events.publish(returnName, {"success":data.success, "data": data.data});      
       this.socket.disconnect();
