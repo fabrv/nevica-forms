@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu" color="primary"></ion-icon>
     </button>
-    <ion-title>Historial</ion-title>
+    <ion-title><strong>Historial</strong></ion-title>
 
     <ion-buttons end>
       <button ion-button color="primary" (click)="upload()" *ngIf="forms.length > 0">
@@ -24,6 +24,9 @@
   </ion-item-group>
   <ion-item-group *ngIf="uploadedForms.length > 0">
     <ion-item-divider color="light">SUBIDOS</ion-item-divider>
-    <ion-item no-lines *ngFor="let uform of uploadedforms">{{uform.FORM_NAME}}</ion-item>
+    <ion-item no-lines *ngFor="let uform of uploadedForms">
+        {{uform.FORM_NAME}}
+        <p item-end>{{uform.UPLOADED_DATE}}</p>        
+    </ion-item>
   </ion-item-group>
 </ion-content>

@@ -17,4 +17,30 @@
 
 .sidemenu{
     background-color: #FF9800 !important;
+
+    ion-item-group{
+        box-shadow: 0 1px 5px 1px rgba(0,0,0,.05) !important;
+        border-radius: 15px;
+        background-color: map-get($colors, trans-light);
+        ion-item-divider{
+            background-color: transparent !important;
+            font-weight: bold !important;
+        }
+        button{
+            background-color: transparent !important;
+        }        
+    }
+
+    ion-list{
+        margin-bottom: 20px;
+        ion-item{
+            box-shadow: 0 1px 5px 1px rgba(0,0,0,.05) !important;
+            border-radius: 15px;
+            transition: box-shadow .2s;
+        }
+        ion-item:hover{
+            box-shadow: 0 3px 15px 1px rgba(0,0,0,.2) !important;
+        }
+    }
+
 }

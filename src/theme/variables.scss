@@ -1,6 +1,10 @@
 $font-path: "../assets/fonts";
 $app-direction: ltr;
 
+@font-face {
+  font-family: "Poppins";
+  src: url("../assets/fonts/Poppins-Medium.ttf")
+}
 
 @import "ionic.globals";
 
@@ -9,7 +13,10 @@ $colors: (
   secondary:  #347DFE,
   danger:     #f53d3d,
   light:      #f4f4f4,
-  dark:       #272727
+  dark:       #272727,
+  trans-light: rgba(255,255,255,.1),
+  trans-dark: rgba(0,0,0,.5),
+  trans-secondary: rgba(52, 126, 254, 0.85)
 );
 
 
@@ -17,7 +24,13 @@ $colors: (
 // --------------------------------------------------
 $background-color: #F7F8FA;
 $toolbar-background: $background-color;
-$font-family-md-base: -apple-system, "Helvetica Neue", "Roboto", sans-serif;
+$font-family-md-base: "Poppins", sans-serif;
+$font-family-ios-base: "Poppins", sans-serif;
+$menu-md-box-shadow: none;
+
+.instructions{
+  text-align: center;
+}
 
 //Card Theme
 $card-md-background-color: white;

@@ -10,6 +10,7 @@ import { AnswerPage } from '../answer/answer';
 export class HomePage {
   availableForms:any = [];
   showInstructions: boolean = true;
+  finishedForms: any = [];
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, private socket: SocketProvider, public loadingCtrl: LoadingController, public events: Events,public actionSheetCtrl: ActionSheetController) {
     if (localStorage.availableForms) {
@@ -24,7 +25,14 @@ export class HomePage {
       //create the item as an empty json stringified ("[]")
       localStorage.availableForms = JSON.stringify(this.availableForms);
     }
-  }  
+
+    this.events.subscribe("finishedFormsChanged", () => {
+      if (localStorage.finishedForms){
+        this.finishedForms = JSON.parse(localStorage.finishedForms);
+      }
+    });
+  }
+  
 
   //Remove form from available lists
   removeForm(form){
@@ -124,7 +132,9 @@ export class HomePage {
                 "DATE_CREATED": (data.data.recordset[0].DATE_CREATED).slice(0,10),
                 "CODE": code,
                 "QUESTIONS": questions,
-                "FINISHED_DATE":""
+                "FINISHED_DATE":"",
+                "LAST_SLIDE": 0,
+                "FILLED_NO": 0
               }
             );            
             this.localSave()
@@ -144,6 +154,12 @@ export class HomePage {
       loading.dismiss();
       this.showAlert("Encuesta ya existe", "")      
     }    
+  }
+
+  ionViewDidEnter(){
+    if (localStorage.finishedForms){
+      this.finishedForms = JSON.parse(localStorage.finishedForms);
+    }
   }
 
   localSave(){
@@ -213,16 +229,9 @@ export class HomePage {
             this.removeForm(form)
           }
         },{
-          text: 'Subir',
-          handler: () => {
-            console.log('Archive clicked');
-          }
-        },{
           text: 'Cancelar',
-          role: 'cancelar',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
+          role: 'cancel',
+          handler: () => {}
         }
       ]
     });

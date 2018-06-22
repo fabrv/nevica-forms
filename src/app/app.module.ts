@@ -11,6 +11,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { SocketProvider } from '../providers/socket/socket';
 import { FormPage } from '../pages/form/form';
 import { AnswerPage } from '../pages/answer/answer';
+import { StorageSaveProvider } from '../providers/storage-save/storage-save';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,7 @@ import { AnswerPage } from '../pages/answer/answer';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, { autoFocusAssist: false , scrollAssist: false,iconMode: "md"} )
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -36,7 +37,8 @@ import { AnswerPage } from '../pages/answer/answer';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    SocketProvider
+    SocketProvider,
+    StorageSaveProvider
   ]
 })
 export class AppModule {}

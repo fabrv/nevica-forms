@@ -1,9 +1,10 @@
 <ion-header no-border>
   <ion-navbar>
     <button ion-button menuToggle>
-      <ion-icon name="menu" color="primary"></ion-icon>
+        <ion-badge *ngIf="finishedForms.length > 0">{{finishedForms.length}}</ion-badge>
+        <ion-icon name="list" color="primary"></ion-icon>
     </button>
-    <ion-title>Formularios disponibles</ion-title>
+    <ion-title><strong>Formularios disponibles</strong></ion-title>
     <ion-buttons end>
       <button ion-button icon-only color="primary" (click)="showPrompt()">
         <ion-icon name="add"></ion-icon>        
@@ -11,14 +12,13 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-
 <ion-content padding>
   <p *ngIf="showInstructions" class="instructions">No hay formularios para realizar, presionar + para agregar</p>
   <ion-list no-lines>
       <ion-item-sliding *ngFor="let item of availableForms" [id]="item" class="forms-list">
         <ion-item [id]="item" (click)="pushPage(item.FORM_NAME)" (press)="formActionSheet(item)">
           
-          <b style="padding-top: 2px;">{{item.FORM_NAME}}</b>
+          {{item.FORM_NAME}}
           <p item-end>{{item.DATE_CREATED}}</p>
 
         </ion-item>

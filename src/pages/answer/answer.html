@@ -8,7 +8,7 @@
 
 
 <ion-content padding>
-  <ion-slides pager>
+  <ion-slides>
 
     <ion-slide *ngFor="let item of form.QUESTIONS; let last = last">
       <h2>{{item.QUESTION}}</h2>
@@ -59,4 +59,8 @@
     </ion-slide>
     
   </ion-slides>
+    
+  <div class="progress" [style.width]="(this.form.LAST_SLIDE/(this.form.QUESTIONS.length - 1))*100 + '%'">    
+    <div class="progress-shadow"></div>
+  </div>
 </ion-content>

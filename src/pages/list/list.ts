@@ -53,9 +53,23 @@ export class ListPage {
       //Once the message is receive unsuscribe
       this.events.unsubscribe("formUploaded");
       if (data.success == true){     
-        //Pass the recently uploaded forms to a antoher variable so it can be displayed in 'Subidos'        
-        localStorage.uploadedforms = this.forms
-        this.uploadedForms = this.forms
+        //Get current date and format it in YYYY-MM-DD HH:mm:SS
+        let currentdate = new Date(); 
+        let datetime:string = currentdate.getFullYear() + "-"
+                        + (currentdate.getMonth()+1)  + "-"
+                        + currentdate.getDate() + " "
+                        + currentdate.getHours() + ":"
+                        + currentdate.getMinutes() + ":"
+                        + currentdate.getSeconds()
+        //Pass the name and the uploaded date of the forms to another variable
+        for (let f = 0; f < this.forms.length; f++){
+          this.uploadedForms.push({
+            "FORM_NAME": this.forms[f].FORM_NAME,
+            "UPLOADED_DATE": datetime
+          })
+        }
+        //Push uploadedForms to localstorage
+        localStorage.uploadedForms = JSON.stringify(this.uploadedForms)        
         //Clear the finished forms variables
         this.forms = [];
         localStorage.finishedForms = "[]"
