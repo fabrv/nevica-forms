@@ -47,4 +47,4 @@ Please read [CONTRIBUTING.md](#) for details on our code of conduct, and the pro
 * **Fabrizzio Rivera** - [fabrv](https://github.com/fabrv)
 
 ## License
-This project is under the **GNU GENERAL PUBLIC LICENSE** - see [LICENSE.md](LICENSE.MD) for details.
+This project is under the **GNU GENERAL PUBLIC LICENSE** - see [LICENSE](https://github.com/fabrv/SalmonPier/blob/master/LICENSE) for details.
