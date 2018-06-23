@@ -1,0 +1,13 @@
+{
+  "name": "Salmon Pier",
+  "short_name": "sPier",
+  "start_url": "index.html",
+  "display": "standalone",
+  "icons": [{
+    "src": "assets/imgs/logo.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  }],
+  "background_color": "#FF9800",
+  "theme_color": "#FF9800"
+}
