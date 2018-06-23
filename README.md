@@ -26,7 +26,7 @@ The first step for setting the dev enviorment is installing all the npm dependec
 ```
 npm install
 ```
-Great! Once that's finish you are all set to start. This software is under ["Attribution-NonCommercial-ShareAlike 4.0 International"](https://creativecommons.org/licenses/by-nc-sa/4.0/) so you may not use this software for commercial purpouse and any change you make must be distributed under this same license.
+Great! Once that's finish you are all set to start. This software is under **GNU GENERAL PUBLIC LICENSE** so any change you make must be distributed under this same license.
 Alright!, now give the app a run with the command
 ```
 ionic serve
@@ -47,4 +47,4 @@ Please read [CONTRIBUTING.md](#) for details on our code of conduct, and the pro
 * **Fabrizzio Rivera** - [fabrv](https://github.com/fabrv)
 
 ## License
-This project is under the ["Attribution-NonCommercial-ShareAlike 4.0 International"](https://creativecommons.org/licenses/by-nc-sa/4.0/) - see [LICENSE.md](#) for details.
+This project is under the **GNU GENERAL PUBLIC LICENSE** - see [LICENSE.md](LICENSE.MD) for details.
