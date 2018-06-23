@@ -15,6 +15,6 @@ export class StorageSaveProvider {
   }
 
   updateFinishedForms(){
-    this.events.publish("finishedFormsChanged")
+    this.events.publish('finishedFormsChanged')
   }
 }

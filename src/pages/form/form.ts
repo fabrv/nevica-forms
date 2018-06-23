@@ -14,7 +14,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'form.html',
 })
 export class FormPage {
-  datetime: string = "";
+  datetime: string = '';
   questions: any = [];
   formName: string;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
