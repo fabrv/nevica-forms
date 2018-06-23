@@ -1,4 +1,4 @@
-# SalmonPier
+# SalmonPier [![Build Status](https://travis-ci.org/fabrv/SalmonPier.svg?branch=master)](https://travis-ci.org/fabrv/SalmonPier)
 SalmonPier (temp. name) is an app for data collection in field. We hope to help researchers with a pretty, light-weight, and easy to use app that will make data collection easier, faster and more reliable.
 Every step of the project is made with extensive usability testing with the aim to make it as intuitive as possible.
 
