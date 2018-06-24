@@ -5,7 +5,7 @@ import * as io from 'socket.io-client';
 @Injectable()
 export class SocketProvider {
   socket: any;
-  address: string = '192.168.0.6'
+  address: string = '192.168.0.7'
   port: number = 8080;  
   serverAddress: string = 'http://' + this.address + ':' + this.port;
 
