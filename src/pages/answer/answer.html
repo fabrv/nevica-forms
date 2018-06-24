@@ -14,7 +14,7 @@
       <h2>{{item.QUESTION}}</h2>
       <ion-list inset id="input-list">
         <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 2" type="text" value="" placeholder="Respuesta"></ion-input>
-        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 7" type="number" value="" placeholder="Respuesta"></ion-input>        
+        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 7" type="number" pattern="[0-9]*" value="" placeholder="Respuesta"></ion-input>        
         <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 10" type="email" value="" placeholder="Respuesta"></ion-input>
         <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 11" type="tel" value="" placeholder="Respuesta"></ion-input>
       </ion-list>
