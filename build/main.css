@@ -5536,7 +5536,7 @@ ion-footer {
 }
 
 ion-app.ios {
-  font-family: "Poppins", sans-serif;
+  font-family: -apple-system, "Helvetica Neue", "Roboto", sans-serif;
   font-size: 1.4rem;
   background-color: #F7F8FA;
 }

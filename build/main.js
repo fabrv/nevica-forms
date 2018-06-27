@@ -27,11 +27,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Ionic pages and navigation.
  */
 var AnswerPage = (function () {
-    function AnswerPage(navCtrl, navParams, storageSave) {
+    function AnswerPage(navCtrl, navParams, storageSave, toastCtrl) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.storageSave = storageSave;
-        this.formId = "";
+        this.toastCtrl = toastCtrl;
+        this.formId = '';
         this.forms = [];
         this.form = [];
         this.forms = JSON.parse(localStorage.availableForms);
@@ -70,11 +71,11 @@ var AnswerPage = (function () {
     AnswerPage.prototype.finishForm = function () {
         //Get current date and format it in YYYY-MM-DD HH:mm:SS
         var currentdate = new Date();
-        var datetime = currentdate.getFullYear() + "-"
-            + (currentdate.getMonth() + 1) + "-"
-            + currentdate.getDate() + " "
-            + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":"
+        var datetime = currentdate.getFullYear() + '-'
+            + (currentdate.getMonth() + 1) + '-'
+            + currentdate.getDate() + ' '
+            + currentdate.getHours() + ':'
+            + currentdate.getMinutes() + ':'
             + currentdate.getSeconds();
         this.form.FINISHED_DATE = datetime;
         this.form.LAST_SLIDE = 0;
@@ -92,10 +93,19 @@ var AnswerPage = (function () {
             localStorage.finishedForms = JSON.stringify([this.form]);
         }
         for (var i = 0; i < this.form.QUESTIONS.length; i++) {
-            this.form.QUESTIONS[i].ANSWER = "";
+            this.form.QUESTIONS[i].ANSWER = '';
         }
         localStorage.availableForms = JSON.stringify(this.forms);
         this.storageSave.updateFinishedForms();
+        this.presentToast('Formulario finalizado y guardado.');
+    };
+    //Default ionic toast
+    AnswerPage.prototype.presentToast = function (message) {
+        var toast = this.toastCtrl.create({
+            message: message,
+            duration: 3000
+        });
+        toast.present();
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["m" /* Slides */]),
@@ -103,9 +113,9 @@ var AnswerPage = (function () {
     ], AnswerPage.prototype, "slides", void 0);
     AnswerPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-answer',template:/*ion-inline-start:"/home/travis/build/fabrv/SalmonPier/src/pages/answer/answer.html"*/'<ion-header no-border>\n\n  <ion-navbar>\n    <ion-title>{{formId}}</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <ion-slides>\n\n    <ion-slide *ngFor="let item of form.QUESTIONS; let last = last">\n      <h2>{{item.QUESTION}}</h2>\n      <ion-list inset id="input-list">\n        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 2" type="text" value="" placeholder="Respuesta"></ion-input>\n        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 7" type="number" value="" placeholder="Respuesta"></ion-input>        \n        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 10" type="email" value="" placeholder="Respuesta"></ion-input>\n        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 11" type="tel" value="" placeholder="Respuesta"></ion-input>\n      </ion-list>\n      \n      <p class="color-gray" *ngIf="item.TYPE == 9">Presionar en el boton para elegir color</p>\n      <input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 9" type="color" class="input-color">\n\n      <ion-list [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 5" radio-group>\n        <ion-item>\n          <ion-label>Yes</ion-label>\n          <ion-radio value="1"></ion-radio>\n        </ion-item>\n      \n        <ion-item>\n          <ion-label>No</ion-label>\n          <ion-radio value="0"></ion-radio>\n        </ion-item>\n      </ion-list>\n\n      <ion-list [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 1" radio-group>\n        <ion-item *ngFor="let option of item.OPTIONS">\n          <ion-label>{{option.OPTION_CAPTION}}</ion-label>\n          <ion-radio value="{{option.OPTION_VALUE}}"></ion-radio>\n        </ion-item>\n      </ion-list>\n\n      <ion-range [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 6"></ion-range>\n      \n      <ion-list inset class="datetime" *ngIf="item.TYPE == 8">\n        <ion-item>\n          <ion-label>Seleccionar fecha</ion-label>\n          <ion-datetime [(ngModel)]="item.ANSWER" displayFormat="DD/MM/YYYY"></ion-datetime>\n        </ion-item>\n      </ion-list>\n\n      <input *ngIf="item.TYPE == 4" [(ngModel)]="item.ANSWER" type="file" accept="image/*" capture="camera" />\n\n      <button ion-button (click)="prevSlide()"clear>Anterior</button>\n      <button ion-button (click)="nextSlide()" *ngIf="last == false">Siguiente</button>\n      <br>\n      <button ion-button (click)="finishForm()" *ngIf="last" large>Finalizar</button>\n    </ion-slide>\n    \n  </ion-slides>\n    \n  <div class="progress" [style.width]="(this.form.LAST_SLIDE/(this.form.QUESTIONS.length - 1))*100 + \'%\'">    \n    <div class="progress-shadow"></div>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/home/travis/build/fabrv/SalmonPier/src/pages/answer/answer.html"*/
+            selector: 'page-answer',template:/*ion-inline-start:"/home/travis/build/fabrv/SalmonPier/src/pages/answer/answer.html"*/'<ion-header no-border>\n\n  <ion-navbar>\n    <ion-title>{{formId}}</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding>\n  <ion-slides>\n\n    <ion-slide *ngFor="let item of form.QUESTIONS; let last = last">\n      <h2>{{item.QUESTION}}</h2>\n      <ion-list inset id="input-list">\n        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 2" type="text" value="" placeholder="Respuesta"></ion-input>\n        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 7" type="number" pattern="[0-9]*" value="" placeholder="Respuesta"></ion-input>        \n        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 10" type="email" value="" placeholder="Respuesta"></ion-input>\n        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 11" type="tel" value="" placeholder="Respuesta"></ion-input>\n      </ion-list>\n      \n      <p class="color-gray" *ngIf="item.TYPE == 9">Presionar en el boton para elegir color</p>\n      <input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 9" type="color" class="input-color">\n\n      <ion-list [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 5" radio-group>\n        <ion-item>\n          <ion-label>Si</ion-label>\n          <ion-radio value="1"></ion-radio>\n        </ion-item>\n      \n        <ion-item>\n          <ion-label>No</ion-label>\n          <ion-radio value="0"></ion-radio>\n        </ion-item>\n      </ion-list>\n\n      <ion-list [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 1" radio-group>\n        <ion-item *ngFor="let option of item.OPTIONS">\n          <ion-label>{{option.OPTION_CAPTION}}</ion-label>\n          <ion-radio value="{{option.OPTION_VALUE}}"></ion-radio>\n        </ion-item>\n      </ion-list>\n\n      <ion-range [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 6"></ion-range>\n      \n      <ion-list inset class="datetime" *ngIf="item.TYPE == 8">\n        <ion-item>\n          <ion-label>Seleccionar fecha</ion-label>\n          <ion-datetime [(ngModel)]="item.ANSWER" displayFormat="DD/MM/YYYY"></ion-datetime>\n        </ion-item>\n      </ion-list>\n\n      <input *ngIf="item.TYPE == 4" [(ngModel)]="item.ANSWER" type="file" accept="image/*" capture="camera" />\n\n      <button ion-button (click)="prevSlide()"clear>Anterior</button>\n      <button ion-button (click)="nextSlide()" *ngIf="last == false">Siguiente</button>\n      <br>\n      <button ion-button (click)="finishForm()" *ngIf="last" large>Finalizar</button>\n    </ion-slide>\n    \n  </ion-slides>\n    \n  <div class="progress" [style.width]="(this.form.LAST_SLIDE/(this.form.QUESTIONS.length - 1))*100 + \'%\'">    \n    <div class="progress-shadow"></div>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/home/travis/build/fabrv/SalmonPier/src/pages/answer/answer.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__providers_storage_save_storage_save__["a" /* StorageSaveProvider */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */], __WEBPACK_IMPORTED_MODULE_2__providers_storage_save_storage_save__["a" /* StorageSaveProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["n" /* ToastController */]])
     ], AnswerPage);
     return AnswerPage;
 }());
@@ -142,7 +152,7 @@ var FormPage = (function () {
     function FormPage(navCtrl, navParams) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
-        this.datetime = "";
+        this.datetime = '';
         this.questions = [];
         var forms = JSON.parse(localStorage.finishedForms);
         this.datetime = navParams.get('date');
@@ -256,10 +266,10 @@ var HomePage = (function () {
         }
         else {
             //if localstorage item for availableForms doesn't exist then
-            //create the item as an empty json stringified ("[]")
+            //create the item as an empty json stringified ('[]')
             localStorage.availableForms = JSON.stringify(this.availableForms);
         }
-        this.events.subscribe("finishedFormsChanged", function () {
+        this.events.subscribe('finishedFormsChanged', function () {
             if (localStorage.finishedForms) {
                 _this.finishedForms = JSON.parse(localStorage.finishedForms);
             }
@@ -281,8 +291,8 @@ var HomePage = (function () {
                     handler: function () {
                         //Animation for form removal
                         //Move form item 300px to the right and fade it
-                        document.getElementById(form).style.transform = "translate(-350px)";
-                        document.getElementById(form).style.opacity = "0";
+                        document.getElementById(form).style.transform = 'translate(-350px)';
+                        document.getElementById(form).style.opacity = '0';
                         //Actual removal of the form from the available list
                         //The timeout is set 0.05s after the animation is finished.
                         setTimeout(function () {
@@ -315,11 +325,11 @@ var HomePage = (function () {
         }
         //Call getForm function in SocketProvider if there is no form with code
         if (!formExists) {
-            this.socket.transactionEmitter(code, "getForm", "addForm");
+            this.socket.transactionEmitter(code, 'getForm', 'addForm');
             //Subscibe to 'addForm' in SocketProvider
-            this.events.subscribe("addForm", function (data) {
+            this.events.subscribe('addForm', function (data) {
                 //Once the message is receive unsuscribe
-                _this.events.unsubscribe("addForm");
+                _this.events.unsubscribe('addForm');
                 //If the transaction was succesfull then parse the SQL to a usable array.        
                 if (data.success == true) {
                     //If the server returned at least 1 form.          
@@ -331,21 +341,21 @@ var HomePage = (function () {
                             //If it has more than one option it will push the option instead of creating a new question
                             if (prevQuestion == data.data.recordset[x].QUESTION_ID) {
                                 questions[questions.length - 1].OPTIONS.push({
-                                    "OPTION_CAPTION": data.data.recordset[x].OPTION_CAPTION,
-                                    "OPTION_VALUE": data.data.recordset[x].OPTION_VALUE
+                                    'OPTION_CAPTION': data.data.recordset[x].OPTION_CAPTION,
+                                    'OPTION_VALUE': data.data.recordset[x].OPTION_VALUE
                                 });
                             }
                             else {
                                 //If it the first option then it will create the question.
                                 questions.push({
-                                    "TYPE": data.data.recordset[x].TYPE_ID,
-                                    "QUESTION": data.data.recordset[x].QUESTION,
-                                    "QUESTION_ID": data.data.recordset[x].QUESTION_ID,
-                                    "OPTIONS": [{
-                                            "OPTION_CAPTION": data.data.recordset[x].OPTION_CAPTION,
-                                            "OPTION_VALUE": data.data.recordset[x].OPTION_VALUE
+                                    'TYPE': data.data.recordset[x].TYPE_ID,
+                                    'QUESTION': data.data.recordset[x].QUESTION,
+                                    'QUESTION_ID': data.data.recordset[x].QUESTION_ID,
+                                    'OPTIONS': [{
+                                            'OPTION_CAPTION': data.data.recordset[x].OPTION_CAPTION,
+                                            'OPTION_VALUE': data.data.recordset[x].OPTION_VALUE
                                         }],
-                                    "ANSWER": ""
+                                    'ANSWER': ''
                                 });
                             }
                             prevQuestion = data.data.recordset[x].QUESTION_ID;
@@ -353,24 +363,24 @@ var HomePage = (function () {
                         //The new form is created and the QUESTIONS array, now already properly parsed, 
                         //is added in a property of the form
                         _this.availableForms.push({
-                            "FORM_NAME": data.data.recordset[0].FORM_NAME,
-                            "DATE_CREATED": (data.data.recordset[0].DATE_CREATED).slice(0, 10),
-                            "CODE": code,
-                            "QUESTIONS": questions,
-                            "FINISHED_DATE": "",
-                            "LAST_SLIDE": 0,
-                            "FILLED_NO": 0
+                            'FORM_NAME': data.data.recordset[0].FORM_NAME,
+                            'DATE_CREATED': (data.data.recordset[0].DATE_CREATED).slice(0, 10),
+                            'CODE': code,
+                            'QUESTIONS': questions,
+                            'FINISHED_DATE': '',
+                            'LAST_SLIDE': 0,
+                            'FILLED_NO': 0
                         });
                         _this.localSave();
                         _this.showInstructions = false;
                     }
                     else {
-                        _this.showAlert("No existe esa encuesta", "No existe un formulario con el codigo ingresado");
-                        console.error("No existe un formulario con el codigo ingresado");
+                        _this.showAlert('No existe esa encuesta', 'No existe un formulario con el codigo ingresado');
+                        console.error('No existe un formulario con el codigo ingresado');
                     }
                 }
                 else {
-                    _this.showAlert("¡Algo salió mal!", "Error al  hacer la transacción. " + data.data.number + ", " + data.data.originalError.message);
+                    _this.showAlert('¡Algo salió mal!', 'Error al  hacer la transacción. ' + data.data.number + ', ' + data.data.originalError.message);
                     console.error(data.data);
                 }
                 loading.dismiss();
@@ -378,7 +388,7 @@ var HomePage = (function () {
         }
         else {
             loading.dismiss();
-            this.showAlert("Encuesta ya existe", "");
+            this.showAlert('Encuesta ya existe', '');
         }
     };
     HomePage.prototype.ionViewDidEnter = function () {
@@ -401,7 +411,7 @@ var HomePage = (function () {
         var _this = this;
         var prompt = this.alertCtrl.create({
             title: 'Agregar formulario',
-            message: "Escribir codigo de formulario a agregar",
+            message: 'Escribir codigo de formulario a agregar',
             inputs: [
                 {
                     name: 'codigo',
@@ -417,10 +427,10 @@ var HomePage = (function () {
                     handler: function (data) {
                         //Add form function
                         if (data.codigo) {
-                            _this.addForm(data.codigo.replace(/'/g, "").replace(/"/g, '').replace(/;/g, ""));
+                            _this.addForm(data.codigo.replace(/'/g, '').replace(/'/g, '').replace(/;/g, ''));
                         }
                         else {
-                            _this.showAlert("Codigo vacio", "Debe ingresar un codigo para avanzar");
+                            _this.showAlert('Codigo vacio', 'Debe ingresar un codigo para avanzar');
                         }
                     }
                 }
@@ -461,7 +471,7 @@ var HomePage = (function () {
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/home/travis/build/fabrv/SalmonPier/src/pages/home/home.html"*/'<ion-header no-border>\n  <ion-navbar>\n    <button ion-button menuToggle>\n        <ion-badge *ngIf="finishedForms.length > 0">{{finishedForms.length}}</ion-badge>\n        <ion-icon name="list" color="primary"></ion-icon>\n    </button>\n    <ion-title><strong>Formularios disponibles</strong></ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only color="primary" (click)="showPrompt()">\n        <ion-icon name="add"></ion-icon>        \n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <p *ngIf="showInstructions" class="instructions">No hay formularios para realizar, presionar + para agregar</p>\n  <ion-list no-lines>\n      <ion-item-sliding *ngFor="let item of availableForms" [id]="item" class="forms-list">\n        <ion-item [id]="item" (click)="pushPage(item.FORM_NAME)" (press)="formActionSheet(item)">\n          \n          {{item.FORM_NAME}}\n          <p item-end>{{item.DATE_CREATED}}</p>\n\n        </ion-item>\n        <ion-item-options side="right">\n          <button ion-button icon-only color="danger" (click)="removeForm(item);">\n              <ion-icon name="close"></ion-icon>\n          </button>\n        </ion-item-options>      \n    </ion-item-sliding>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/travis/build/fabrv/SalmonPier/src/pages/home/home.html"*/,
+            selector: 'page-home',template:/*ion-inline-start:"/home/travis/build/fabrv/SalmonPier/src/pages/home/home.html"*/'<ion-header no-border>\n  <ion-navbar>\n    <button ion-button menuToggle>\n        <ion-badge *ngIf="finishedForms.length > 0">{{finishedForms.length}}</ion-badge>\n        <ion-icon name="list" color="primary"></ion-icon>\n    </button>\n    <ion-title><strong>Disponibles</strong></ion-title>\n    <ion-buttons end>\n      <button ion-button icon-only color="primary" (click)="showPrompt()">\n        <ion-icon name="add"></ion-icon>        \n      </button>\n    </ion-buttons>\n  </ion-navbar>\n</ion-header>\n<ion-content padding>\n  <p *ngIf="showInstructions" class="instructions">No hay formularios para realizar, presionar + para agregar</p>\n  <ion-list no-lines>\n      <ion-item-sliding *ngFor="let item of availableForms" [id]="item" class="forms-list">\n        <ion-item [id]="item" (click)="pushPage(item.FORM_NAME)" (press)="formActionSheet(item)">\n          \n          {{item.FORM_NAME}}\n          <p item-end>{{item.DATE_CREATED}}</p>\n\n        </ion-item>\n        <ion-item-options side="right">\n          <button ion-button icon-only color="danger" (click)="removeForm(item);">\n              <ion-icon name="close"></ion-icon>\n          </button>\n        </ion-item-options>      \n    </ion-item-sliding>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/home/travis/build/fabrv/SalmonPier/src/pages/home/home.html"*/,
             providers: [__WEBPACK_IMPORTED_MODULE_2__providers_socket_socket__["a" /* SocketProvider */]]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* AlertController */], __WEBPACK_IMPORTED_MODULE_2__providers_socket_socket__["a" /* SocketProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["h" /* LoadingController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Events */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* ActionSheetController */]])
@@ -508,12 +518,12 @@ var ListPage = (function () {
         this.uploadedForms = [];
         //Create variables for uploaded forms and finishedforms in localstorage if...
         //they don't exist
-        //("[]" is of course an empty array)
+        //('[]' is of course an empty array)
         if (!localStorage.finishedForms) {
-            localStorage.finishedForms = "[]";
+            localStorage.finishedForms = '[]';
         }
         if (!localStorage.uploadedForms) {
-            localStorage.uploadedForms = "[]";
+            localStorage.uploadedForms = '[]';
         }
         //'Parse them bois' in local variables
         this.forms = JSON.parse(localStorage.finishedForms);
@@ -536,38 +546,38 @@ var ListPage = (function () {
         loading.present();
         //Start emitter with all the forms to be uploaded
         //The event to be returned will be 'formsuploaded'
-        this.socket.transactionEmitter(this.forms, "insertFilledForms", "formsUploaded");
+        this.socket.transactionEmitter(this.forms, 'insertFilledForms', 'formsUploaded');
         //The socket will return with the event 'formsUploaded' so here we subscribe to said event
-        this.events.subscribe("formsUploaded", function (data) {
+        this.events.subscribe('formsUploaded', function (data) {
             //Once the message is receive unsuscribe
-            _this.events.unsubscribe("formUploaded");
+            _this.events.unsubscribe('formUploaded');
             if (data.success == true) {
                 //Get current date and format it in YYYY-MM-DD HH:mm:SS
                 var currentdate = new Date();
-                var datetime = currentdate.getFullYear() + "-"
-                    + (currentdate.getMonth() + 1) + "-"
-                    + currentdate.getDate() + " "
-                    + currentdate.getHours() + ":"
-                    + currentdate.getMinutes() + ":"
+                var datetime = currentdate.getFullYear() + '-'
+                    + (currentdate.getMonth() + 1) + '-'
+                    + currentdate.getDate() + ' '
+                    + currentdate.getHours() + ':'
+                    + currentdate.getMinutes() + ':'
                     + currentdate.getSeconds();
                 //Pass the name and the uploaded date of the forms to another variable
                 for (var f = 0; f < _this.forms.length; f++) {
                     _this.uploadedForms.push({
-                        "FORM_NAME": _this.forms[f].FORM_NAME,
-                        "UPLOADED_DATE": datetime
+                        'FORM_NAME': _this.forms[f].FORM_NAME,
+                        'UPLOADED_DATE': datetime
                     });
                 }
                 //Push uploadedForms to localstorage
                 localStorage.uploadedForms = JSON.stringify(_this.uploadedForms);
                 //Clear the finished forms variables
                 _this.forms = [];
-                localStorage.finishedForms = "[]";
+                localStorage.finishedForms = '[]';
                 //Give the user a cue that the forms have been succesfully uploaded
                 //(The cue will be a standard ionic Toast)
-                _this.presentToast("Formularios exitosamente subidos");
+                _this.presentToast('Formularios exitosamente subidos');
             }
             else {
-                _this.showAlert("¡Algo salió mal!", "Error al  hacer la transacción. " + data.data.number + ", " + data.data.originalError.message);
+                _this.showAlert('¡Algo salió mal!', 'Error al  hacer la transacción. ' + data.data.number + ', ' + data.data.originalError.message);
                 console.error(data.data);
             }
             loading.dismiss();
@@ -747,7 +757,7 @@ var MyApp = (function () {
         if (localStorage.finishedForms) {
             this.forms = JSON.parse(localStorage.finishedForms);
         }
-        this.events.subscribe("finishedFormsChanged", function () {
+        this.events.subscribe('finishedFormsChanged', function () {
             if (localStorage.finishedForms) {
                 _this.forms = JSON.parse(localStorage.finishedForms);
             }
@@ -777,40 +787,40 @@ var MyApp = (function () {
         loading.present();
         //Start emitter with all the forms to be uploaded
         //The event to be returned will be 'formsuploaded'
-        this.socket.transactionEmitter(this.forms, "insertFilledForms", "formsUploaded");
+        this.socket.transactionEmitter(this.forms, 'insertFilledForms', 'formsUploaded');
         //The socket will return with the event 'formsUploaded' so here we subscribe to said event
-        this.events.subscribe("formsUploaded", function (data) {
+        this.events.subscribe('formsUploaded', function (data) {
             //Once the message is receive unsuscribe
-            _this.events.unsubscribe("formUploaded");
+            _this.events.unsubscribe('formUploaded');
             if (data.success == true) {
                 //Get current date and format it in YYYY-MM-DD HH:mm:SS
                 var currentdate = new Date();
-                var datetime = currentdate.getFullYear() + "-"
-                    + (currentdate.getMonth() + 1) + "-"
-                    + currentdate.getDate() + " "
-                    + currentdate.getHours() + ":"
-                    + currentdate.getMinutes() + ":"
+                var datetime = currentdate.getFullYear() + '-'
+                    + (currentdate.getMonth() + 1) + '-'
+                    + currentdate.getDate() + ' '
+                    + currentdate.getHours() + ':'
+                    + currentdate.getMinutes() + ':'
                     + currentdate.getSeconds();
                 //Pass the name and the uploaded date of the forms to another variable
                 for (var f = 0; f < _this.forms.length; f++) {
                     _this.uploadedForms.push({
-                        "FORM_NAME": _this.forms[f].FORM_NAME,
-                        "UPLOADED_DATE": datetime
+                        'FORM_NAME': _this.forms[f].FORM_NAME,
+                        'UPLOADED_DATE': datetime
                     });
                 }
                 //Push uploadedForms to localstorage
                 localStorage.uploadedForms = JSON.stringify(_this.uploadedForms);
                 //Clear the finished forms variables
                 _this.forms = [];
-                localStorage.finishedForms = "[]";
+                localStorage.finishedForms = '[]';
                 //Give the user a cue that the forms have been succesfully uploaded
                 //(The cue will be a standard ionic Toast)
-                _this.presentToast("Formularios exitosamente subidos");
+                _this.presentToast('Formularios exitosamente subidos');
                 //Publish change in finishedForms, this will change the badge number in the homescreen
                 _this.storageSave.updateFinishedForms();
             }
             else {
-                _this.showAlert("¡Algo salió mal!", "Error al  hacer la transacción. " + data.data.number + ", " + data.data.originalError.message);
+                _this.showAlert('¡Algo salió mal!', 'Error al  hacer la transacción. ' + data.data.number + ', ' + data.data.originalError.message);
                 console.error(data.data);
             }
             loading.dismiss();
@@ -881,9 +891,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var SocketProvider = (function () {
     function SocketProvider(events) {
         this.events = events;
-        this.address = "192.168.0.6";
+        this.address = '192.168.0.7';
         this.port = 8080;
-        this.serverAddress = "http://" + this.address + ":" + this.port;
+        this.serverAddress = 'http://' + this.address + ':' + this.port;
     }
     SocketProvider.prototype.transactionEmitter = function (value, transactionName, returnName) {
         var _this = this;
@@ -891,15 +901,15 @@ var SocketProvider = (function () {
         //Random HEX to new transaction
         //EVERY Transaction MUST have a new random HEX to ID it
         this.transactionID = (Math.random() * 0xFFFFFF << 0).toString(16);
-        console.log("------" + this.transactionID + "-----");
+        console.log('------' + this.transactionID + '-----');
         //Socket connection
         this.socket = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__["connect"](this.serverAddress, { reconnection: false });
         this.socket.emit(transactionName, value, this.transactionID);
-        console.log("EMITTED");
+        console.log('EMITTED');
         this.socket.on(this.transactionID, function (data) {
             //<<returnName>> event, with array as response
             //If the server answered then the transaction was succesfull
-            _this.events.publish(returnName, { "success": data.success, "data": data.data });
+            _this.events.publish(returnName, { 'success': data.success, 'data': data.data });
             _this.socket.disconnect();
             success = true;
             return;
@@ -909,7 +919,7 @@ var SocketProvider = (function () {
             if (success == false) {
                 _this.socket.disconnect();
                 //If the server timed-out then the transaction was unsuccesful
-                _this.events.publish(returnName, { "success": false, "data": { "number": 504, "originalError": { "message": "Tiempo de espera con el servidor ha terminado" } } });
+                _this.events.publish(returnName, { 'success': false, 'data': { 'number': 504, 'originalError': { 'message': 'Tiempo de espera con el servidor ha terminado' } } });
             }
         }, 5000);
     };
@@ -954,7 +964,7 @@ var StorageSaveProvider = (function () {
         console.log('Hello StorageSaveProvider Provider');
     }
     StorageSaveProvider.prototype.updateFinishedForms = function () {
-        this.events.publish("finishedFormsChanged");
+        this.events.publish('finishedFormsChanged');
     };
     StorageSaveProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
