@@ -1,5 +1,5 @@
 import { Component, ViewChild} from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, ToastController } from 'ionic-angular';
 import { StorageSaveProvider } from '../../providers/storage-save/storage-save'
 
 /**
@@ -16,10 +16,10 @@ import { StorageSaveProvider } from '../../providers/storage-save/storage-save'
 })
 export class AnswerPage {
   @ViewChild(Slides) slides: Slides;
-  formId: string = "";
+  formId: string = '';
   forms: any = [];
   form: any = [];
-  constructor(public navCtrl: NavController, public navParams: NavParams, public storageSave: StorageSaveProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public storageSave: StorageSaveProvider, public toastCtrl: ToastController) {
     this.forms = JSON.parse(localStorage.availableForms);
     this.formId = navParams.get('formId');    
 
@@ -63,11 +63,11 @@ export class AnswerPage {
   finishForm(){
     //Get current date and format it in YYYY-MM-DD HH:mm:SS
     let currentdate = new Date(); 
-    let datetime:string = currentdate.getFullYear() + "-"
-                    + (currentdate.getMonth()+1)  + "-"
-                    + currentdate.getDate() + " "
-                    + currentdate.getHours() + ":"
-                    + currentdate.getMinutes() + ":"
+    let datetime:string = currentdate.getFullYear() + '-'
+                    + (currentdate.getMonth()+1)  + '-'
+                    + currentdate.getDate() + ' '
+                    + currentdate.getHours() + ':'
+                    + currentdate.getMinutes() + ':'
                     + currentdate.getSeconds()
 
     this.form.FINISHED_DATE = datetime;
@@ -91,9 +91,20 @@ export class AnswerPage {
     }
     
     for (let i = 0; i < this.form.QUESTIONS.length; i ++){        
-      this.form.QUESTIONS[i].ANSWER = ""
+      this.form.QUESTIONS[i].ANSWER = ''
     }
     localStorage.availableForms = JSON.stringify(this.forms);
     this.storageSave.updateFinishedForms();
+
+    this.presentToast('Formulario finalizado y guardado.')
+  }
+
+  //Default ionic toast
+  presentToast(message) {
+    const toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
   }
 }
