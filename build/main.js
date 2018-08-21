@@ -891,7 +891,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var SocketProvider = (function () {
     function SocketProvider(events) {
         this.events = events;
-        this.address = '192.168.0.7';
+        this.address = "10.0.75.1";
         this.port = 8080;
         this.serverAddress = 'http://' + this.address + ':' + this.port;
     }
