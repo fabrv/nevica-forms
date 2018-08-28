@@ -221,4 +221,27 @@ export class HomePage {
     });
     toast.present();
   }
+
+  //Default ionic actionsheet
+  //This action sheet to delete a form
+  async formActionSheet(form: string) {
+    console.log("ENTERED")
+    let actionSheet = await this.actionSheetCtrl.create({
+      header: 'Opciones de formulario',
+      buttons: [
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            this.removeForm(form)
+          }
+        },{
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {}
+        }
+      ]
+    });
+    actionSheet.present();
+  }
 }
