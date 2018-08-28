@@ -7649,13 +7649,15 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 var HomePage = /** @class */ (function () {
-    function HomePage(events, alertCtrl, socket, loadingCtrl, actionSheetCtrl) {
+    function HomePage(events, alertCtrl, socket, loadingCtrl, actionSheetCtrl, cdr, toastController) {
         var _this = this;
         this.events = events;
         this.alertCtrl = alertCtrl;
         this.socket = socket;
         this.loadingCtrl = loadingCtrl;
         this.actionSheetCtrl = actionSheetCtrl;
+        this.cdr = cdr;
+        this.toastController = toastController;
         this.availableForms = [];
         this.showInstructions = true;
         this.finishedForms = [];
@@ -7707,6 +7709,8 @@ var HomePage = /** @class */ (function () {
                                             _this.localSave();
                                             if (_this.availableForms.length == 0) {
                                                 _this.showInstructions = true;
+                                                _this.cdr.detectChanges();
+                                                _this.presentToast("Formulario borrado exitosamente.");
                                             }
                                         }, 300);
                                     }
@@ -7749,43 +7753,44 @@ var HomePage = /** @class */ (function () {
                             this.socket.transactionEmitter(code, 'getForm', 'addForm');
                             //Subscibe to 'addForm' in SocketProvider
                             this.events.subscribe('addForm', function (data) {
+                                var transaction = data;
                                 //Once the message is receive unsuscribe
                                 _this.events.unsubscribe('addForm');
                                 //If the transaction was succesfull then parse the SQL to a usable array.        
-                                if (data.success == true) {
+                                if (transaction.success == true) {
                                     //If the server returned at least 1 form.          
-                                    if (data.data.recordset.length > 0) {
+                                    if (transaction.data.recordset.length > 0) {
                                         var questions = [];
                                         var prevQuestion = -1;
-                                        for (var x = 0; x < data.data.recordset.length; x++) {
+                                        for (var x = 0; x < transaction.data.recordset.length; x++) {
                                             //If the question id is repeated then it must be because it has more than one option
                                             //If it has more than one option it will push the option instead of creating a new question
-                                            if (prevQuestion == data.data.recordset[x].QUESTION_ID) {
+                                            if (prevQuestion == transaction.data.recordset[x].QUESTION_ID) {
                                                 questions[questions.length - 1].OPTIONS.push({
-                                                    'OPTION_CAPTION': data.data.recordset[x].OPTION_CAPTION,
-                                                    'OPTION_VALUE': data.data.recordset[x].OPTION_VALUE
+                                                    'OPTION_CAPTION': transaction.data.recordset[x].OPTION_CAPTION,
+                                                    'OPTION_VALUE': transaction.data.recordset[x].OPTION_VALUE
                                                 });
                                             }
                                             else {
                                                 //If it the first option then it will create the question.
                                                 questions.push({
-                                                    'TYPE': data.data.recordset[x].TYPE_ID,
-                                                    'QUESTION': data.data.recordset[x].QUESTION,
-                                                    'QUESTION_ID': data.data.recordset[x].QUESTION_ID,
+                                                    'TYPE': transaction.data.recordset[x].TYPE_ID,
+                                                    'QUESTION': transaction.data.recordset[x].QUESTION,
+                                                    'QUESTION_ID': transaction.data.recordset[x].QUESTION_ID,
                                                     'OPTIONS': [{
-                                                            'OPTION_CAPTION': data.data.recordset[x].OPTION_CAPTION,
-                                                            'OPTION_VALUE': data.data.recordset[x].OPTION_VALUE
+                                                            'OPTION_CAPTION': transaction.data.recordset[x].OPTION_CAPTION,
+                                                            'OPTION_VALUE': transaction.data.recordset[x].OPTION_VALUE
                                                         }],
                                                     'ANSWER': ''
                                                 });
                                             }
-                                            prevQuestion = data.data.recordset[x].QUESTION_ID;
+                                            prevQuestion = transaction.data.recordset[x].QUESTION_ID;
                                         }
                                         //The new form is created and the QUESTIONS array, now already properly parsed, 
                                         //is added in a property of the form
                                         _this.availableForms.push({
-                                            'FORM_NAME': data.data.recordset[0].FORM_NAME,
-                                            'DATE_CREATED': (data.data.recordset[0].DATE_CREATED).slice(0, 10),
+                                            'FORM_NAME': transaction.data.recordset[0].FORM_NAME,
+                                            'DATE_CREATED': (transaction.data.recordset[0].DATE_CREATED).slice(0, 10),
                                             'CODE': code,
                                             'QUESTIONS': questions,
                                             'FINISHED_DATE': '',
@@ -7801,9 +7806,11 @@ var HomePage = /** @class */ (function () {
                                     }
                                 }
                                 else {
-                                    _this.showAlert('¡Algo salió mal!', 'Error al  hacer la transacción. ' + data.data.number + ', ' + data.data.originalError.message);
-                                    console.error(data.data);
+                                    _this.showAlert('¡Algo salió mal!', 'Error al  hacer la transacción. ' + transaction.data.number + ', ' + transaction.data.originalError.message);
+                                    console.error(transaction.data);
                                 }
+                                _this.presentToast("Formulario agregado exitosamente.");
+                                _this.cdr.detectChanges();
                                 loading.dismiss();
                             });
                         }
@@ -7885,6 +7892,23 @@ var HomePage = /** @class */ (function () {
             });
         });
     };
+    HomePage.prototype.presentToast = function (message) {
+        return __awaiter(this, void 0, void 0, function () {
+            var toast;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.toastController.create({
+                            message: message,
+                            duration: 2000
+                        })];
+                    case 1:
+                        toast = _a.sent();
+                        toast.present();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     HomePage = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-home',
@@ -7892,7 +7916,7 @@ var HomePage = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./home.page.scss */ "./src/app/home/home.page.scss")],
             providers: [_socket_service__WEBPACK_IMPORTED_MODULE_1__["SocketService"]]
         }),
-        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Events"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"], _socket_service__WEBPACK_IMPORTED_MODULE_1__["SocketService"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ActionSheetController"]])
+        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Events"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"], _socket_service__WEBPACK_IMPORTED_MODULE_1__["SocketService"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ActionSheetController"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])
     ], HomePage);
     return HomePage;
 }());
@@ -7932,7 +7956,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var SocketService = /** @class */ (function () {
     function SocketService(events) {
         this.events = events;
-        this.address = "10.0.75.1";
+        this.address = "192.168.0.6";
         this.port = 8080;
         this.serverAddress = 'http://' + this.address + ':' + this.port;
         //This is a hex that will identify every transaction with the node server
