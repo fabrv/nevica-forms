@@ -1,0 +1,34 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button color="primary"></ion-menu-button>
+    </ion-buttons>
+    <ion-title><strong>Disponibles</strong></ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="showPrompt()">
+        <ion-icon color="primary" slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <p *ngIf="showInstructions" class="instructions">No hay formularios para realizar, presionar + para agregar</p>
+  <ion-list>
+      <ion-item-sliding *ngFor="let item of availableForms" [id]="item" class="forms-list">
+        <!--<ion-item [id]="item" (click)="pushPage(item.FORM_NAME)" (press)="formActionSheet(item)">-->
+          <ion-item [id]="item">
+            {{item.FORM_NAME}}
+          <p slot="end">{{item.DATE_CREATED}}</p>
+
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option (click)="removeForm(item);" color="danger">
+              <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>      
+    </ion-item-sliding>
+  </ion-list>
+
+</ion-content>

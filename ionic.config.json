@@ -1,8 +1,7 @@
 {
-  "name": "FormCreator",
-  "app_id": "",
-  "type": "ionic-angular",
+  "name": "SalmonPier",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "angular"
 }
