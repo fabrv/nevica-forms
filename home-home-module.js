@@ -7573,7 +7573,7 @@ var HomePageModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header no-border>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button color=\"primary\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title><strong>Disponibles</strong></ion-title>\n\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"showPrompt()\">\n        <ion-icon color=\"primary\" slot=\"icon-only\" name=\"add\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content padding>\n  <p *ngIf=\"showInstructions\" class=\"instructions\">No hay formularios para realizar, presionar + para agregar</p>\n  <ion-list>\n      <ion-item-sliding *ngFor=\"let item of availableForms\" [id]=\"item\" class=\"forms-list\">\n        <!--<ion-item [id]=\"item\" (click)=\"pushPage(item.FORM_NAME)\" (press)=\"formActionSheet(item)\">-->\n          <ion-item [id]=\"item\">\n            {{item.FORM_NAME}}\n          <p slot=\"end\">{{item.DATE_CREATED}}</p>\n\n        </ion-item>\n        <ion-item-options side=\"end\">\n          <ion-item-option (click)=\"removeForm(item);\" color=\"danger\">\n              <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon>\n          </ion-item-option>\n        </ion-item-options>      \n    </ion-item-sliding>\n  </ion-list>\n\n</ion-content>\n"
+module.exports = "<ion-header no-border>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button color=\"primary\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title><strong>Disponibles</strong></ion-title>\n\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"showPrompt()\">\n        <ion-icon color=\"primary\" slot=\"icon-only\" name=\"add\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content padding>\n  <p *ngIf=\"showInstructions\" class=\"instructions\">No hay formularios para realizar, presionar + para agregar</p>\n  <ion-list>\n      <ion-item-sliding *ngFor=\"let item of availableForms\" [id]=\"item\" class=\"forms-list\" (pressup)=\"formActionSheet(item)\">\n        <!--<ion-item [id]=\"item\" (click)=\"pushPage(item.FORM_NAME)\">-->\n          <ion-item [id]=\"item\">\n            {{item.FORM_NAME}}\n          <p slot=\"end\">{{item.DATE_CREATED}}</p>\n\n        </ion-item>\n        <ion-item-options side=\"end\">\n          <ion-item-option (click)=\"removeForm(item);\" color=\"danger\">\n              <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon>\n          </ion-item-option>\n        </ion-item-options>      \n    </ion-item-sliding>\n  </ion-list>\n\n</ion-content>\n"
 
 /***/ }),
 
@@ -7904,6 +7904,40 @@ var HomePage = /** @class */ (function () {
                     case 1:
                         toast = _a.sent();
                         toast.present();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    //Default ionic actionsheet
+    //This action sheet to delete a form
+    HomePage.prototype.formActionSheet = function (form) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var actionSheet;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log("ENTERED");
+                        return [4 /*yield*/, this.actionSheetCtrl.create({
+                                header: 'Opciones de formulario',
+                                buttons: [
+                                    {
+                                        text: 'Eliminar',
+                                        role: 'destructive',
+                                        handler: function () {
+                                            _this.removeForm(form);
+                                        }
+                                    }, {
+                                        text: 'Cancelar',
+                                        role: 'cancel',
+                                        handler: function () { }
+                                    }
+                                ]
+                            })];
+                    case 1:
+                        actionSheet = _a.sent();
+                        actionSheet.present();
                         return [2 /*return*/];
                 }
             });
