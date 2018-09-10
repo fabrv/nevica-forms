@@ -7573,7 +7573,7 @@ var HomePageModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header no-border>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button color=\"primary\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title><strong>Disponibles</strong></ion-title>\n\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"showPrompt()\">\n        <ion-icon color=\"primary\" slot=\"icon-only\" name=\"add\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content padding>\n  <p *ngIf=\"showInstructions\" class=\"instructions\">No hay formularios para realizar, presionar + para agregar</p>\n  <ion-list>\n      <ion-item-sliding *ngFor=\"let item of availableForms\" [id]=\"item\" class=\"forms-list\" (pressup)=\"formActionSheet(item)\">\n        <!--<ion-item [id]=\"item\" (click)=\"pushPage(item.FORM_NAME)\">-->\n          <ion-item [id]=\"item\">\n            {{item.FORM_NAME}}\n          <p slot=\"end\">{{item.DATE_CREATED}}</p>\n\n        </ion-item>\n        <ion-item-options side=\"end\">\n          <ion-item-option (click)=\"removeForm(item);\" color=\"danger\">\n              <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon>\n          </ion-item-option>\n        </ion-item-options>      \n    </ion-item-sliding>\n  </ion-list>\n\n</ion-content>\n"
+module.exports = "<ion-header no-border>\n  <ion-toolbar>\n    <ion-buttons slot=\"start\">\n      <ion-menu-button color=\"primary\"></ion-menu-button>\n    </ion-buttons>\n    <ion-title><strong>Disponibles</strong></ion-title>\n\n    <ion-buttons slot=\"end\">\n      <ion-button (click)=\"showPrompt()\">\n        <ion-icon color=\"primary\" slot=\"icon-only\" name=\"add\"></ion-icon>\n      </ion-button>\n    </ion-buttons>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content padding>\n  <p *ngIf=\"showInstructions\" class=\"instructions\">No hay formularios para realizar, presionar + para agregar</p>\n  <ion-list>\n      <ion-item-sliding *ngFor=\"let item of availableForms\" (click)=\"pushPage(item.FORM_NAME)\" [id]=\"item\" class=\"forms-list\" (pressup)=\"formActionSheet(item)\">\n        <!--<ion-item [id]=\"item\">-->\n          <ion-item [id]=\"item\">\n            {{item.FORM_NAME}}\n          <p slot=\"end\">{{item.DATE_CREATED}}</p>\n\n        </ion-item>\n        <ion-item-options side=\"end\">\n          <ion-item-option (click)=\"removeForm(item);\" color=\"danger\">\n              <ion-icon slot=\"icon-only\" name=\"close\"></ion-icon>\n          </ion-item-option>\n        </ion-item-options>      \n    </ion-item-sliding>\n  </ion-list>\n\n</ion-content>\n"
 
 /***/ }),
 
@@ -7584,7 +7584,7 @@ module.exports = "<ion-header no-border>\n  <ion-toolbar>\n    <ion-buttons slot
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".forms-list {\n  border-radius: 15px !important;\n  margin-bottom: 15px !important;\n  box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.05);\n  transition: opacity .2s, background-color .2s, -webkit-transform .2s;\n  transition: transform .2s, opacity .2s, background-color .2s;\n  transition: transform .2s, opacity .2s, background-color .2s, -webkit-transform .2s; }\n  .forms-list ion-item {\n    background-color: #F9FAFC; }\n  .forms-list:hover {\n  background-color: #f0f0f0; }\n  ion-list {\n  padding: 10px; }\n"
+module.exports = ".forms-list {\n  border-radius: 15px !important;\n  margin-bottom: 15px !important;\n  box-shadow: 0 1px 5px 1px rgba(0, 0, 0, 0.05);\n  transition: opacity .2s, background-color .2s, -webkit-transform .2s;\n  transition: transform .2s, opacity .2s, background-color .2s;\n  transition: transform .2s, opacity .2s, background-color .2s, -webkit-transform .2s;\n  cursor: pointer; }\n  .forms-list ion-item {\n    background-color: #F9FAFC; }\n  .forms-list:hover {\n  background-color: #f0f0f0; }\n  ion-list {\n  padding: 10px; }\n"
 
 /***/ }),
 
@@ -7601,6 +7601,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _socket_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../socket.service */ "./src/app/socket.service.ts");
 /* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/index.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7648,8 +7649,9 @@ var __generator = (undefined && undefined.__generator) || function (thisArg, bod
 
 
 
+
 var HomePage = /** @class */ (function () {
-    function HomePage(events, alertCtrl, socket, loadingCtrl, actionSheetCtrl, cdr, toastController) {
+    function HomePage(events, alertCtrl, socket, loadingCtrl, actionSheetCtrl, cdr, toastController, router) {
         var _this = this;
         this.events = events;
         this.alertCtrl = alertCtrl;
@@ -7658,6 +7660,7 @@ var HomePage = /** @class */ (function () {
         this.actionSheetCtrl = actionSheetCtrl;
         this.cdr = cdr;
         this.toastController = toastController;
+        this.router = router;
         this.availableForms = [];
         this.showInstructions = true;
         this.finishedForms = [];
@@ -7943,6 +7946,9 @@ var HomePage = /** @class */ (function () {
             });
         });
     };
+    HomePage.prototype.pushPage = function (form) {
+        this.router.navigate(['/answer', { formId: form }]);
+    };
     HomePage = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-home',
@@ -7950,7 +7956,7 @@ var HomePage = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./home.page.scss */ "./src/app/home/home.page.scss")],
             providers: [_socket_service__WEBPACK_IMPORTED_MODULE_1__["SocketService"]]
         }),
-        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Events"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"], _socket_service__WEBPACK_IMPORTED_MODULE_1__["SocketService"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ActionSheetController"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"]])
+        __metadata("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["Events"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["AlertController"], _socket_service__WEBPACK_IMPORTED_MODULE_1__["SocketService"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ActionSheetController"], _angular_core__WEBPACK_IMPORTED_MODULE_0__["ChangeDetectorRef"], _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["ToastController"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
     ], HomePage);
     return HomePage;
 }());
@@ -7990,7 +7996,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var SocketService = /** @class */ (function () {
     function SocketService(events) {
         this.events = events;
-        this.address = "192.168.0.6";
+        this.address = "192.168.0.8";
         this.port = 8080;
         this.serverAddress = 'http://' + this.address + ':' + this.port;
         //This is a hex that will identify every transaction with the node server

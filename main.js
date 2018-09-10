@@ -8,6 +8,10 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
+	"./answer/answer.module": [
+		"./src/app/answer/answer.module.ts",
+		"answer-answer-module"
+	],
 	"./home/home.module": [
 		"./src/app/home/home.module.ts",
 		"home-home-module"
@@ -72,7 +76,8 @@ var routes = [
     {
         path: 'list',
         loadChildren: './list/list.module#ListPageModule'
-    }
+    },
+    { path: 'answer', loadChildren: './answer/answer.module#AnswerPageModule' }
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {
@@ -97,7 +102,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-app>\n  <ion-split-pane>\n    <ion-menu>\n      <ion-header>\n        <ion-toolbar>\n          <ion-title>Menu</ion-title>\n        </ion-toolbar>\n      </ion-header>\n      <ion-content>\n        <ion-list>\n          <ion-menu-toggle auto-hide=\"false\" *ngFor=\"let p of appPages\">\n            <ion-item [routerDirection]=\"'root'\" [routerLink]=\"[p.url]\">\n              <ion-icon slot=\"start\" [name]=\"p.icon\"></ion-icon>\n              <ion-label>\n                {{p.title}}\n              </ion-label>\n            </ion-item>\n          </ion-menu-toggle>\n        </ion-list>\n      </ion-content>\n    </ion-menu>\n    <ion-router-outlet main></ion-router-outlet>\n  </ion-split-pane>\n</ion-app>\n"
+module.exports = "<ion-app>\n  <ion-split-pane>\n    <ion-menu swipeGesture=\"false\">\n      <ion-header>\n        <ion-toolbar>\n          <ion-title>Menu</ion-title>\n        </ion-toolbar>\n      </ion-header>\n      <ion-content>\n        <ion-list>\n          <ion-menu-toggle auto-hide=\"false\" *ngFor=\"let p of appPages\">\n            <ion-item [routerDirection]=\"'root'\" [routerLink]=\"[p.url]\">\n              <ion-icon slot=\"start\" [name]=\"p.icon\"></ion-icon>\n              <ion-label>\n                {{p.title}}\n              </ion-label>\n            </ion-item>\n          </ion-menu-toggle>\n        </ion-list>\n      </ion-content>\n    </ion-menu>\n    <ion-router-outlet main></ion-router-outlet>\n  </ion-split-pane>\n</ion-app>\n"
 
 /***/ }),
 
@@ -214,7 +219,9 @@ var AppModule = /** @class */ (function () {
             entryComponents: [],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
-                _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["IonicModule"].forRoot(),
+                _ionic_angular__WEBPACK_IMPORTED_MODULE_3__["IonicModule"].forRoot({
+                    swipeBackEnabled: true
+                }),
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"]
             ],
             providers: [
