@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Slides, ToastController } from '@ionic/angular'
 
 @Component({
   selector: 'app-answer',
@@ -7,12 +8,15 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./answer.page.scss'],
 })
 export class AnswerPage implements OnInit {
+  @ViewChild(Slides) slides: Slides;
   formId: string = '';
   forms: any = [];
   form: any = [];
+
+  slideOpts: any = {allowTouchMove: false};
   private sub: any;
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, public toastCtrl: ToastController) { }
 
   ngOnInit() {
     this.forms = JSON.parse(localStorage.availableForms);
@@ -26,6 +30,80 @@ export class AnswerPage implements OnInit {
         this.form = this.forms[x];
       }
     }
+    this.slideOpts = {allowTouchMove: false, initialSlide: this.form.LAST_SLIDE - 1}
+  }
+
+  nextSlide(){
+    this.slides.slideNext(200);    
+
+    //Change lastSlide ID
+    //Since getActiveIndex is asyncronous then the data must be returned with a callback
+    //(VS code will give an error, but dismiss it.)
+    setTimeout(()=>{
+      //The timeout is set to get the index once the SlideNext() has finished
+      this.slides.getActiveIndex().then(index =>{
+        this.form.LAST_SLIDE = index
+      })
+    },300)    
+    localStorage.availableForms = JSON.stringify(this.forms);
+  }
+  prevSlide(){        
+    this.slides.slidePrev(200);    
+
+    //Same comment as in nextSlide()
+    setTimeout(()=>{
+      this.slides.getActiveIndex().then(index =>{
+        this.form.LAST_SLIDE = index
+      })
+    },300)
+    localStorage.availableForms = JSON.stringify(this.forms);
+  }
+
+
+  finishForm(){
+    //Get current date and format it in YYYY-MM-DD HH:mm:SS
+    let currentdate = new Date(); 
+    let datetime:string = currentdate.getFullYear() + '-'
+                    + (currentdate.getMonth()+1)  + '-'
+                    + currentdate.getDate() + ' '
+                    + currentdate.getHours() + ':'
+                    + currentdate.getMinutes() + ':'
+                    + currentdate.getSeconds()
+
+    this.form.FINISHED_DATE = datetime;
+
+
+    this.form.LAST_SLIDE = 0;
+    this.slides.slideTo(0,200);
+
+    this.form.FILLED_NO += 1;
+
+    if (localStorage.finishedForms) {      
+      let finishedForms:any = [];
+      finishedForms = JSON.parse(localStorage.finishedForms);
+      finishedForms.push(this.form);
+      
+      localStorage.finishedForms = JSON.stringify(finishedForms);
+    }else{
+      localStorage.finishedForms = JSON.stringify([this.form]);
+    }
+    
+    for (let i = 0; i < this.form.QUESTIONS.length; i ++){        
+      this.form.QUESTIONS[i].ANSWER = ''
+    }
+    localStorage.availableForms = JSON.stringify(this.forms);
+    //this.storageSave.updateFinishedForms();
+
+    this.presentToast('Formulario finalizado y guardado.')
+  }
+
+  //Default ionic toast
+  async presentToast(message) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
   }
 
 }

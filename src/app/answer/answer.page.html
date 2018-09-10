@@ -8,9 +8,9 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-slides>
+  <ion-slides [options]="slideOpts">
 
-    <ion-slide *ngFor="let item of form.QUESTIONS; let last = last">
+    <ion-slide *ngFor="let item of form.QUESTIONS; let last = last" id="slides">
       <h2>{{item.QUESTION}}</h2>
       <ion-list inset id="input-list">
         <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 2" type="text" value="" placeholder="Respuesta"></ion-input>
@@ -56,10 +56,10 @@
 
       <input *ngIf="item.TYPE == 4" [(ngModel)]="item.ANSWER" type="file" accept="image/*" capture="camera" />
 
-      <ion-button (click)="prevSlide()"clear>Anterior</ion-button>
-      <ion-button (click)="nextSlide()" *ngIf="last == false">Siguiente</ion-button>
+      <ion-button (click)="prevSlide()" fill="clear" shape="round" size="large">Anterior</ion-button>
+      <ion-button (click)="nextSlide()" *ngIf="last == false" shape="round" size="large">Siguiente</ion-button>
       <br>
-      <ion-button (click)="finishForm()" *ngIf="last" large>Finalizar</ion-button>
+      <ion-button (click)="finishForm()" *ngIf="last" large shape="round" size="large">Finalizar</ion-button>
     </ion-slide>
     
   </ion-slides>
