@@ -9,7 +9,7 @@ import { Transaction } from './transaction-class'
 
 export class SocketService {
   socket: any;
-  address: string = "192.168.0.6"
+  address: string = "192.168.0.8"
   port: number = 8080;  
   serverAddress: string = 'http://' + this.address + ':' + this.port;
   

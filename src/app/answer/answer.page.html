@@ -1,0 +1,70 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{formId}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-slides>
+
+    <ion-slide *ngFor="let item of form.QUESTIONS; let last = last">
+      <h2>{{item.QUESTION}}</h2>
+      <ion-list inset id="input-list">
+        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 2" type="text" value="" placeholder="Respuesta"></ion-input>
+        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 7" type="number" pattern="[0-9]*" value="" placeholder="Respuesta"></ion-input>        
+        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 10" type="email" value="" placeholder="Respuesta"></ion-input>
+        <ion-input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 11" type="tel" value="" placeholder="Respuesta"></ion-input>
+      </ion-list>
+      
+      <p class="color-gray" *ngIf="item.TYPE == 9">Presionar en el boton para elegir color</p>
+      <input [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 9" type="color" class="input-color">
+
+      <ion-list *ngIf="item.TYPE == 5">
+        <ion-radio-group [(ngModel)]="item.ANSWER">
+          <ion-item>
+            <ion-label>Si</ion-label>
+            <ion-radio value="1"></ion-radio>
+          </ion-item>
+        
+          <ion-item>
+            <ion-label>No</ion-label>
+            <ion-radio value="0"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+
+      <ion-list *ngIf="item.TYPE == 1">
+        <ion-radio-group [(ngModel)]="item.ANSWER">
+          <ion-item *ngFor="let option of item.OPTIONS">
+            <ion-label>{{option.OPTION_CAPTION}}</ion-label>
+            <ion-radio value="{{option.OPTION_VALUE}}"></ion-radio>
+          </ion-item>
+        </ion-radio-group>
+      </ion-list>
+
+      <ion-range [(ngModel)]="item.ANSWER" *ngIf="item.TYPE == 6"></ion-range>
+      
+      <ion-list inset class="datetime" *ngIf="item.TYPE == 8">
+        <ion-item>
+          <ion-label>Seleccionar fecha</ion-label>
+          <ion-datetime [(ngModel)]="item.ANSWER" displayFormat="DD/MM/YYYY"></ion-datetime>
+        </ion-item>
+      </ion-list>
+
+      <input *ngIf="item.TYPE == 4" [(ngModel)]="item.ANSWER" type="file" accept="image/*" capture="camera" />
+
+      <ion-button (click)="prevSlide()"clear>Anterior</ion-button>
+      <ion-button (click)="nextSlide()" *ngIf="last == false">Siguiente</ion-button>
+      <br>
+      <ion-button (click)="finishForm()" *ngIf="last" large>Finalizar</ion-button>
+    </ion-slide>
+    
+  </ion-slides>
+    
+  <div class="progress" [style.width]="(this.form.LAST_SLIDE/(this.form.QUESTIONS.length - 1))*100 + '%'">    
+    <div class="progress-shadow"></div>
+  </div>
+</ion-content>

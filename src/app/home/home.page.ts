@@ -2,6 +2,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { SocketService } from '../socket.service'
 import { Events, AlertController, LoadingController, ActionSheetController, ToastController } from '@ionic/angular'
 import { Transaction } from '../transaction-class'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,7 @@ export class HomePage {
   showInstructions: boolean = true;
   finishedForms: any = [];
 
-  constructor( public events: Events, public alertCtrl: AlertController, public socket: SocketService, public loadingCtrl: LoadingController, public actionSheetCtrl: ActionSheetController, private cdr:ChangeDetectorRef, public toastController: ToastController ){
+  constructor( public events: Events, public alertCtrl: AlertController, public socket: SocketService, public loadingCtrl: LoadingController, public actionSheetCtrl: ActionSheetController, private cdr:ChangeDetectorRef, public toastController: ToastController, private router: Router ){
 
     if (localStorage.availableForms) {
       //Parse list of availableForms from localstorage to JSON
@@ -243,5 +244,9 @@ export class HomePage {
       ]
     });
     actionSheet.present();
+  }
+
+  pushPage(form){
+    this.router.navigate(['/answer', { formId: form }]);
   }
 }
