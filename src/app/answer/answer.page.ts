@@ -30,7 +30,6 @@ export class AnswerPage implements OnInit {
         this.form = this.forms[x];
       }
     }
-    console.log(this.form.LAST_SLIDE);
     this.slideOpts = {allowTouchMove: false, initialSlide: this.form.LAST_SLIDE}
   }
 
