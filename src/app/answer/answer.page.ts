@@ -8,7 +8,7 @@ import { Slides, ToastController } from '@ionic/angular'
   styleUrls: ['./answer.page.scss'],
 })
 export class AnswerPage implements OnInit {
-  @ViewChild(Slides) slides: Slides;
+  @ViewChild('slides') slides;
   formId: string = '';
   forms: any = [];
   form: any = [];
@@ -30,33 +30,30 @@ export class AnswerPage implements OnInit {
         this.form = this.forms[x];
       }
     }
-    this.slideOpts = {allowTouchMove: false, initialSlide: this.form.LAST_SLIDE - 1}
+    console.log(this.form.LAST_SLIDE);
+    this.slideOpts = {allowTouchMove: false, initialSlide: this.form.LAST_SLIDE}
   }
 
   nextSlide(){
-    this.slides.slideNext(200);    
+    this.slides.nativeElement.slideNext(200);    
 
-    //Change lastSlide ID
-    //Since getActiveIndex is asyncronous then the data must be returned with a callback
-    //(VS code will give an error, but dismiss it.)
-    setTimeout(()=>{
-      //The timeout is set to get the index once the SlideNext() has finished
-      this.slides.getActiveIndex().then(index =>{
-        this.form.LAST_SLIDE = index
-      })
-    },300)    
-    localStorage.availableForms = JSON.stringify(this.forms);
+    this.saveIndex();
   }
-  prevSlide(){        
-    this.slides.slidePrev(200);    
 
-    //Same comment as in nextSlide()
+
+  prevSlide(){        
+    this.slides.nativeElement.slidePrev(200);    
+
+    this.saveIndex();
+  }
+
+  saveIndex(){
+    //Change lastSlide ID
+    //300 ms of timeoute to account for the slides movement.
     setTimeout(()=>{
-      this.slides.getActiveIndex().then(index =>{
-        this.form.LAST_SLIDE = index
-      })
-    },300)
-    localStorage.availableForms = JSON.stringify(this.forms);
+      this.form.LAST_SLIDE = this.slides.nativeElement.getActiveIndex();
+      localStorage.availableForms = JSON.stringify(this.forms);
+    },300);
   }
 
 
@@ -74,7 +71,7 @@ export class AnswerPage implements OnInit {
 
 
     this.form.LAST_SLIDE = 0;
-    this.slides.slideTo(0,200);
+    this.slides.nativeElement.slideTo(0,200);
 
     this.form.FILLED_NO += 1;
 
