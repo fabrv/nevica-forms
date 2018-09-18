@@ -7996,7 +7996,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var SocketService = /** @class */ (function () {
     function SocketService(events) {
         this.events = events;
-        this.address = "192.168.0.8";
+        this.address = "10.0.3.159";
         this.port = 8080;
         this.serverAddress = 'http://' + this.address + ':' + this.port;
         //This is a hex that will identify every transaction with the node server
