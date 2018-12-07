@@ -1,22 +1,27 @@
 <ion-app>
   <ion-split-pane>
-    <ion-menu swipeGesture="false">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Menu</ion-title>
+    <ion-menu persistent="false" type="push" swipeGesture="false">
+      <ion-header no-border>
+        <ion-toolbar color="primary">
+          <ion-title>Llenados</ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-content>
-        <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>
-                {{p.title}}
-              </ion-label>
-            </ion-item>
-          </ion-menu-toggle>
+
+      
+      <ion-content class="sidemenu" padding>
+        <p *ngIf="forms.length == 0" class="instructions">No hay formularios por subir.</p>
+        <ion-list no-lines>
+          <ion-item button="true" *ngIf="forms.length > 0" color="secondary" (click)="upload()">
+            <ion-icon name="cloud-upload" item-start></ion-icon>
+            SUBIR FORMULARIOS
+          </ion-item>
         </ion-list>
+        <ion-item-group no-lines>      
+          <ion-item no-lines *ngFor="let item of forms">
+            <strong>{{item.FORM_NAME}}</strong>
+            <p slot="end" style="color: black;">{{item.FINISHED_DATE}}</p>
+          </ion-item> 
+        </ion-item-group>
       </ion-content>
     </ion-menu>
     <ion-router-outlet main></ion-router-outlet>

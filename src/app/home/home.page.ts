@@ -81,7 +81,7 @@ export class HomePage {
     let formExists: boolean = false;
     //Define loader
     const loading = await this.loadingCtrl.create({
-      content: 'Buscando y cargando formulario...'
+      message: 'Buscando y cargando formulario...'
     });
     await loading.present();
 
