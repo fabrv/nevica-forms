@@ -5,7 +5,7 @@
 export const environment = {
   production: false
 };
-
+export const backendAddress: string = '172.21.67.145:8080';
 /*
  * In development mode, to ignore zone related error stack frames such as
  * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
