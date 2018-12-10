@@ -76,8 +76,6 @@ export class HomePage {
     await confirm.present();
   }
 
-
-
   async addForm(code: string){
     let formExists: boolean = false;
     //Define loader
