@@ -1,8 +1,9 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { SocketService } from '../socket.service'
 import { Events, AlertController, LoadingController, ActionSheetController, ToastController } from '@ionic/angular'
-import { Transaction } from '../transaction-class'
 import { Router } from '@angular/router';
+import { BackendService } from '../services/backend.service';
+import { Question } from '../../components/form'
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,7 @@ export class HomePage {
   showInstructions: boolean = true;
   finishedForms: any = [];
 
-  constructor( public events: Events, public alertCtrl: AlertController, public socket: SocketService, public loadingCtrl: LoadingController, public actionSheetCtrl: ActionSheetController, private cdr:ChangeDetectorRef, public toastController: ToastController, private router: Router ){
+  constructor( public events: Events, public alertCtrl: AlertController, public socket: SocketService, private backend: BackendService, public loadingCtrl: LoadingController, public actionSheetCtrl: ActionSheetController, private cdr:ChangeDetectorRef, public toastController: ToastController, private router: Router ){
 
     if (localStorage.availableForms) {
       //Parse list of availableForms from localstorage to JSON
@@ -61,7 +62,7 @@ export class HomePage {
             setTimeout(()=>{
               let index:number = this.availableForms.indexOf(form);
               this.availableForms.splice(index, 1);
-              this.localSave();              
+              this.localSave();
               if (this.availableForms.length == 0){
                 this.showInstructions = true;
                 this.cdr.detectChanges();
@@ -78,7 +79,90 @@ export class HomePage {
 
 
   async addForm(code: string){
-        
+    let formExists: boolean = false;
+    //Define loader
+    const loading = await this.loadingCtrl.create({
+      message: 'Buscando y cargando formulario...'
+    });
+    await loading.present();
+
+    for (let i: number = 0; i < this.availableForms.length; i++){
+      if (this.availableForms[i].CODE == code){
+        formExists = true;
+        loading.dismiss();
+        this.showAlert('Encuesta ya existe', '');
+      }
+    }
+    //Call getForm function from backendService if there is no form with code
+    if (!formExists){
+      try {
+        const form = await this.backend.getForm(code);
+        console.log(form);
+        if (form.length > 0){
+          //If the server returned at least 1 form.
+          let questions: any = [];
+          let prevQuestion: number = -1;
+          form.forEach((question: Question) => {
+            //If the question id is repeated then it must be because it has more than one option
+            //If it has more than one option it will push the option instead of creating a new question
+            if (prevQuestion == question.QUESTION_ID) {
+              questions[questions.length - 1].OPTIONS.push ({
+                'OPTION_CAPTION': question.OPTION_CAPTION,
+                'OPTION_VALUE': question.OPTION_VALUE
+              })
+            }else{
+              //If it the first option then it will create the question.
+              questions.push(
+                {
+                  'TYPE': question.TYPE_ID,
+                  'QUESTION': question.QUESTION,
+                  'QUESTION_ID': question.QUESTION_ID,
+                  'OPTIONS': [{
+                    'OPTION_CAPTION': question.OPTION_CAPTION,
+                    'OPTION_VALUE': question.OPTION_VALUE
+                  }],
+                  'ANSWER': ''
+                }
+              )
+            }
+            prevQuestion = question.QUESTION_ID
+          })
+
+          //The new form is created and the QUESTIONS array, now already properly parsed, 
+          //is added in a property of the form
+          this.availableForms.push(
+            {
+              'FORM_NAME': form[0].FORM_NAME,
+              'DATE_CREATED': (form[0].DATE_CREATED).slice(0,10),
+              'CODE': code,
+              'QUESTIONS': questions,
+              'FINISHED_DATE':'',
+              'LAST_SLIDE': 0,
+              'FILLED_NO': 0
+            }
+          );
+          this.localSave();
+          this.showInstructions = false;
+
+          this.presentToast("Formulario agregado exitosamente.");
+          this.cdr.detectChanges();
+          loading.dismiss();
+        }else{
+          if (form.status === false){
+            this.showAlert('¡Algo salió mal!', `Error al  hacer la transacción. ${form.error.message}`);
+            console.error(form.error)
+          }else{
+            this.showAlert('No existe esa encuesta', 'No existe un formulario con el codigo ingresado');
+            console.error('No existe un formulario con el codigo ingresado')
+          }
+        }
+      } catch (error) {
+        this.showAlert('¡Algo salió mal!', 'Error al  hacer la transacción.');
+        console.error(error)
+        loading.dismiss();
+      }
+      loading.dismiss()
+    }
   }
 
 

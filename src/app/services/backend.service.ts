@@ -12,14 +12,15 @@ export class BackendService {
 
   /**
    * Returns a promise with questions as callback
-   * @param {number} formCode - The code to query the questions
+   * @param {string} code - The form code to query the questions
    */
-  getForm(formCode: number){
+  public getForm(code: string): Promise<any>{
     return new Promise ((questions)=>{
-      this.http.post(`${environment.backendAddress}/forms/${formCode}`,{}, {})
-      .subscribe(data =>{
-        questions(data);
-      });
+      this.http.get(`${environment.backendAddress}/forms/${code}`)
+      .subscribe(
+        data => questions(data),
+        error => questions({status: false, error: error})
+      );
     })
   }
 }
