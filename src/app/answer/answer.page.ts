@@ -34,14 +34,14 @@ export class AnswerPage implements OnInit {
   }
 
   nextSlide(){
-    this.slides.nativeElement.slideNext(200);    
+    this.slides.slideNext(200);    
 
     this.saveIndex();
   }
 
 
   prevSlide(){        
-    this.slides.nativeElement.slidePrev(200);    
+    this.slides.slidePrev(200);    
 
     this.saveIndex();
   }
@@ -49,8 +49,9 @@ export class AnswerPage implements OnInit {
   saveIndex(){
     //Change lastSlide ID
     //300 ms of timeoute to account for the slides movement.
+    console.log(this.slides.getActiveIndex())
     setTimeout(()=>{
-      this.form.LAST_SLIDE = this.slides.nativeElement.getActiveIndex();
+      this.form.LAST_SLIDE = this.slides.getActiveIndex();
       localStorage.availableForms = JSON.stringify(this.forms);
     },300);
   }
@@ -102,4 +103,7 @@ export class AnswerPage implements OnInit {
     toast.present();
   }
 
+  inputFocus(event){
+    console.log(event);
+  }
 }

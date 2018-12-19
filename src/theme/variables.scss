@@ -110,35 +110,25 @@
     color: var(--ion-color-primary);
   }
 
-  .sidemenu{
-    background-color: #FF9800 !important;
+    .sidemenu{        
+        --background: #FF9800;
 
-    ion-item-group{
-        box-shadow: 0 1px 5px 1px rgba(0,0,0,.05) !important;
-        border-radius: 15px;
-        background-color: var(--ion-color-trans-light);
-        ion-item-divider{
-            background-color: transparent !important;
-            font-weight: bold !important;
-        }
-        button{
-            background-color: transparent !important;
-        }        
-    }
-
-    ion-list{
-        margin-bottom: 20px;
-        ion-item{
+        ion-item-group{
             box-shadow: 0 1px 5px 1px rgba(0,0,0,.05) !important;
             border-radius: 15px;
-            transition: box-shadow .2s;
-        }
-        ion-item:hover{
-            box-shadow: 0 3px 15px 1px rgba(0,0,0,.2) !important;
+            background-color: var(--ion-color-trans-light);
+            ion-item {
+                --background: transparent;
+            }
+            ion-item-divider{
+                background-color: transparent !important;
+                font-weight: bold !important;
+            }
+            button{
+                background-color: transparent !important;
+            }        
         }
     }
-
-}
 }
 
 .instructions{
@@ -151,10 +141,14 @@ $card-md-background-color: white;
 $card-md-border-radius: 8px;
 $card-md-box-shadow-color: rgba(0, 0, 0, .07);
 $card-md-box-shadow: 0 8px 30px 1px $card-md-box-shadow-color;
+*/
 
 //Button Theme
-$button-md-box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .08);
-$button-md-box-shadow-activated: 0 0 15px 1px rgba(255, 152, 0, .8);
-$button-md-border-radius: 16px;
-$button-md-padding: 21px;
-*/
+ion-button{
+    --box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .08);
+    --border-radius: 16px;
+    --padding-bottom: 21px;
+    --padding-end: 21px;
+    --padding-start: 21px;
+    --padding-top: 21px;
+}

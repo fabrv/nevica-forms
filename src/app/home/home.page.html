@@ -15,10 +15,10 @@
 
 <ion-content padding>
   <p *ngIf="showInstructions" class="instructions">No hay formularios para realizar, presionar + para agregar</p>
-  <ion-list>
-      <ion-item-sliding *ngFor="let item of availableForms" (click)="pushPage(item.FORM_NAME)" [id]="item" class="forms-list" (pressup)="formActionSheet(item)">
+  <ion-list lines="none">
+      <ion-item-sliding *ngFor="let item of availableForms" [id]="item" class="forms-list" (pressup)="formActionSheet(item)">
         <!--<ion-item [id]="item">-->
-          <ion-item [id]="item">
+          <ion-item [id]="item" button="true" (click)="pushPage(item.FORM_NAME)">
             {{item.FORM_NAME}}
           <p slot="end">{{item.DATE_CREATED}}</p>
 

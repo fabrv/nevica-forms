@@ -10,14 +10,12 @@
       
       <ion-content class="sidemenu" padding>
         <p *ngIf="forms.length == 0" class="instructions">No hay formularios por subir.</p>
-        <ion-list no-lines>
-          <ion-item button="true" *ngIf="forms.length > 0" color="secondary" (click)="upload()">
-            <ion-icon name="cloud-upload" item-start></ion-icon>
-            SUBIR FORMULARIOS
-          </ion-item>
-        </ion-list>
-        <ion-item-group no-lines>      
-          <ion-item no-lines *ngFor="let item of forms">
+        <ion-button expand="block" *ngIf="forms.length > 0" color="secondary" (click)="upload()">
+          <ion-icon name="cloud-upload" item-start></ion-icon>&nbsp;
+          SUBIR FORMULARIOS
+        </ion-button>
+        <ion-item-group>
+          <ion-item lines="none" *ngFor="let item of forms">
             <strong>{{item.FORM_NAME}}</strong>
             <p slot="end" style="color: black;">{{item.FINISHED_DATE}}</p>
           </ion-item> 
