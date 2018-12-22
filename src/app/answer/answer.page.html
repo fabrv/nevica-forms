@@ -56,10 +56,10 @@
 
       <input *ngIf="item.TYPE == 4" [(ngModel)]="item.ANSWER" type="file" accept="image/*" capture="camera" />
 
-      <ion-button (click)="prevSlide()" fill="clear" shape="round" size="large">Anterior</ion-button>
-      <ion-button (click)="nextSlide()" *ngIf="last == false" shape="round" size="large">Siguiente</ion-button>
+      <ion-button (click)="prevSlide()" fill="clear">Anterior</ion-button>
+      <ion-button (click)="nextSlide()" *ngIf="last == false">Siguiente</ion-button>
       <br>
-      <ion-button (click)="finishForm()" *ngIf="last" large shape="round" size="large">Finalizar</ion-button>
+      <ion-button (click)="finishForm()" *ngIf="last" size="large">Finalizar</ion-button>
     </ion-slide>
     
   </ion-slides>

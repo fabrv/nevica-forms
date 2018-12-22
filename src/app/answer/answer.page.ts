@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Slides, ToastController } from '@ionic/angular'
+import { StorageService } from '../services/storage.service'
 
 @Component({
   selector: 'app-answer',
@@ -8,7 +9,7 @@ import { Slides, ToastController } from '@ionic/angular'
   styleUrls: ['./answer.page.scss'],
 })
 export class AnswerPage implements OnInit {
-  @ViewChild('slides') slides;
+  @ViewChild('slides') slides: Slides;
   formId: string = '';
   forms: any = [];
   form: any = [];
@@ -16,12 +17,12 @@ export class AnswerPage implements OnInit {
   slideOpts: any = {allowTouchMove: false};
   private sub: any;
 
-  constructor(private route: ActivatedRoute, public toastCtrl: ToastController) { }
+  constructor(private route: ActivatedRoute, public toastCtrl: ToastController, private strg: StorageService) { }
 
   ngOnInit() {
     this.forms = JSON.parse(localStorage.availableForms);
     this.sub = this.route.params.subscribe(params => {
-        this.formId = params['formId']; // (+) converts string 'id' to a number
+      this.formId = params['formId']; // (+) converts string 'id' to a number
     });
     this.sub.unsubscribe();
 
@@ -41,17 +42,15 @@ export class AnswerPage implements OnInit {
 
 
   prevSlide(){        
-    this.slides.slidePrev(200);    
-
+    this.slides.slidePrev(200);
     this.saveIndex();
   }
 
   saveIndex(){
     //Change lastSlide ID
     //300 ms of timeoute to account for the slides movement.
-    console.log(this.slides.getActiveIndex())
-    setTimeout(()=>{
-      this.form.LAST_SLIDE = this.slides.getActiveIndex();
+    setTimeout(async ()=>{
+      this.form.LAST_SLIDE = await this.slides.getActiveIndex();
       localStorage.availableForms = JSON.stringify(this.forms);
     },300);
   }
@@ -71,7 +70,7 @@ export class AnswerPage implements OnInit {
 
 
     this.form.LAST_SLIDE = 0;
-    this.slides.nativeElement.slideTo(0,200);
+    this.slides.slideTo(0,200);
 
     this.form.FILLED_NO += 1;
 
@@ -90,7 +89,8 @@ export class AnswerPage implements OnInit {
     }
     localStorage.availableForms = JSON.stringify(this.forms);
     //this.storageSave.updateFinishedForms();
-
+    
+    this.strg.updateFinishedForms()
     this.presentToast('Formulario finalizado y guardado.')
   }
 
