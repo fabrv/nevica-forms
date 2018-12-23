@@ -23,4 +23,16 @@ export class BackendService {
       );
     })
   }
+
+  public postForms(forms: Array<any>): Promise<any>{
+    return new Promise((response)=>{
+      //console.log(encodeURI(JSON.stringify(forms)))
+      //console.log(encodeURI(JSON.stringify(forms)))
+      console.log(forms)
+      this.http.post(`${environment.backendAddress}/forms`,forms).subscribe(
+        data => response({status: true, data: data}),
+        error => response({status: false, error: error})
+      )
+    })
+  }
 }

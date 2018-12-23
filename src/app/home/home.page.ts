@@ -16,7 +16,16 @@ export class HomePage {
   showInstructions: boolean = true;
   finishedForms: any = [];
 
-  constructor( public events: Events, public alertCtrl: AlertController, public socket: SocketService, private backend: BackendService, public loadingCtrl: LoadingController, public actionSheetCtrl: ActionSheetController, private cdr:ChangeDetectorRef, public toastController: ToastController, private router: Router ){
+  constructor(
+    public events: Events, 
+    public alertCtrl: AlertController, 
+    public socket: SocketService, 
+    private backend: BackendService, 
+    public loadingCtrl: LoadingController, 
+    public actionSheetCtrl: ActionSheetController, 
+    private cdr:ChangeDetectorRef, 
+    public toastController: ToastController, 
+    private router: Router){
 
     if (localStorage.availableForms) {
       //Parse list of availableForms from localstorage to JSON
