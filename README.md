@@ -1,4 +1,5 @@
-# Nevica Forms [![Build Status](https://travis-ci.org/fabrv/SalmonPier.svg?branch=master)](https://travis-ci.org/fabrv/SalmonPier)
+# <img src="logo.png" width="50" height="50"> Nevica Forms [![Build Status](https://travis-ci.org/fabrv/SalmonPier.svg?branch=master)](https://travis-ci.org/fabrv/SalmonPier)
+<img src="capture.png">
 Nevica Forms is an app for data collection in field. We hope to help researchers with a pretty, light-weight, and easy to use app that will make data collection easier, faster and more reliable.
 Every step of the project is made with extensive usability testing with the aim to make it as intuitive as possible.
 
@@ -36,8 +37,6 @@ The app works with its backend companion ["SalmonPier BackEnd"](https://github.c
 
 ## Built With
 * [Ionic](https://ionicframework.com/)
-* [NodeJS](https://nodejs.org/en/download/)
-* [Socket.io](https://socket.io/)
 
 ## Contributing
 
